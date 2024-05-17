@@ -1,0 +1,200 @@
+C51 COMPILER V9.60.7.0   PROJETO                                                           05/17/2024 18:36:50 PAGE 1   
+
+
+C51 COMPILER V9.60.7.0, COMPILATION OF MODULE PROJETO
+OBJECT MODULE PLACED IN .\Objects\projeto.obj
+COMPILER INVOKED BY: F:\Keil_v5\C51\BIN\C51.EXE projeto.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\p
+                    -rojeto.lst) TABS(2) OBJECT(.\Objects\projeto.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          
+   3          #define tenthSecond         2 //time to count 0,1 seconds (2 x 50ms)
+   4          #define null                0 //Position in matrice null
+   5          #define zeroDot             1 //Position of 0. in matrice
+   6          #define oneDot              2 //Position of 1. in matrice
+   7          #define twoDot              3 //Position of 2. in matrice
+   8          #define threeDot            4 //Position of 3. in matrice
+   9          #define fourDot             5 //Position of 4. in matrice
+  10          #define fiveDot             6 //Position of 5. in matrice
+  11          #define sixDot              7 //Position of 6. in matrice
+  12          #define sevenDot            8 //Position of 7. in matrice
+  13          #define eightDot            9 //Position of 8. in matrice
+  14          #define nineDot             10  //Position of 9. in matrice
+  15          #define hifenDot            11  //Position of -. in matrice
+  16          #define zero                12  //Position of 0 in matrice
+  17          #define one                 13  //Position of 1 in matrice
+  18          #define two                 14  //Position of 2 in matrice
+  19          #define three               15  //Position of 3 in matrice
+  20          #define four                16  //Position of 4 in matrice
+  21          #define five                17  //Position of 5 in matrice
+  22          #define six                 18  //Position of 6 in matrice
+  23          #define seven               19  //Position of 7 in matrice
+  24          #define eight               20  //Position of 8 in matrice
+  25          #define nine                21  //Position of 9 in matrice
+  26          #define hifen               22  //Position of - in matrice
+  27          #define a                   23  //Position of A in matrice
+  28          #define b                   24  //Position of b in matrice
+  29          #define c                   25  //Position of C in matrice
+  30          #define d                   26  //Position of d in matrice
+  31          
+  32          // display 1 segmentation
+  33          sbit segA1 = P1 ^ 0;
+  34          sbit segB1 = P1 ^ 1;
+  35          sbit segC1 = P1 ^ 2;
+  36          sbit segD1 = P1 ^ 3;
+  37          sbit segE1 = P1 ^ 4;
+  38          sbit segF1 = P1 ^ 5;
+  39          sbit segG1 = P1 ^ 6;
+  40          sbit segDP1 = P1 ^ 7;
+  41          
+  42          // display 2 segmentation
+  43          sbit segA2 = P2 ^ 0;
+  44          sbit segB2 = P2 ^ 1;
+  45          sbit segC2 = P2 ^ 2;
+  46          sbit segD2 = P2 ^ 3;
+  47          sbit segE2 = P2 ^ 4;
+  48          sbit segF2 = P2 ^ 5;
+  49          sbit segG2 = P2 ^ 6;
+  50          sbit segDP2 = P2 ^ 7;
+  51          
+  52          // B1 definition
+  53          sbit B1 = P3^2;
+  54          sbit BA = P3^4;
+C51 COMPILER V9.60.7.0   PROJETO                                                           05/17/2024 18:36:50 PAGE 2   
+
+  55          sbit BB = P3^5;
+  56          sbit BC = P3^6;
+  57          sbit BD = P3^7;
+  58          
+  59          unsigned char counter = 0; // variavel que incrementa cada vez que timer conta 50ms
+  60          int i = 0;         // variavel para assinalar o estado da informa??o nos displays
+  61          
+  62          
+  63          //Function declarations
+  64          void Init(void);
+  65          void display(unsigned char digitMSB, unsigned char digitLSB);
+  66          
+  67          
+  68          void main (void)
+  69          { 
+  70   1        Init(); 
+  71   1      
+  72   1          while(1)                // infinite loop
+  73   1          {
+  74   2            //----------------------------------atualiza informa??o nos displays
+  75   2            display(i, i);
+  76   2      
+  77   2            } 
+  78   1      }
+  79          void Init(void)
+  80          {
+  81   1        //Configuration of interruptions
+  82   1        EA = 1; //ativate global interruptions
+  83   1        ET0 = 1; // activate timer interruption 0
+  84   1        EX0 = 1; // activate external interruption 0
+  85   1        
+  86   1        //Configure TMOD
+  87   1        TMOD &= 0xF0; //Clean initial 4 bits of timer 0
+  88   1        TMOD |= 0x01; //Set timer 0 with 13 bits
+  89   1        
+  90   1        //Configure timer 0
+  91   1        //Timer 0 - 5ms -> (65536(10000h) - 50000(C350h)= 15536(3CB0h))
+  92   1        TH0 = 0x3C; 
+  93   1        TL0 = 0xB0;
+  94   1        
+  95   1        //Configure TCON
+  96   1        TR0 = 1; //enable timer 0
+  97   1        IT0 = 0; //specify falling edge trigger on external interruption 0
+  98   1      }
+  99          
+ 100          //interrupcao tempo 0 para contar tempo de 5ms de debounce
+ 101          void Timer0_ISR (void) interrupt 1
+ 102          { 
+ 103   1        //Timer 0 - 50ms -> (65536(10000h) - 50000(C350h)= 15536(3CB0h))
+ 104   1        //Because its not auto reloaded, need to specify values again
+ 105   1        TH0 = 0x3C; 
+ 106   1        TL0 = 0xB0;
+ 107   1        
+ 108   1        counter++;                      //Increase Counter
+ 109   1        
+ 110   1        if(counter > tenthSecond){          // check if gets past 0.1s
+ 111   2          if (i < d) {
+ 112   3            i++;
+ 113   3          } else {
+ 114   3            i = 0;
+ 115   3          }
+ 116   2          counter = 0;                  //reset ? vari?vel
+C51 COMPILER V9.60.7.0   PROJETO                                                           05/17/2024 18:36:50 PAGE 3   
+
+ 117   2        }
+ 118   1      }
+ 119          
+ 120          void display(unsigned char digitMSB, unsigned char digitLSB)
+ 121          {
+ 122   1        code unsigned segments[27][8] = {
+ 123   1          {1, 1, 1, 1, 1, 1, 1, 1}, // null
+ 124   1          {0, 0, 0, 0, 0, 0, 1, 0}, // 0.
+ 125   1          {1, 0, 0, 1, 1, 1, 1, 0}, // 1.
+ 126   1          {0, 0, 1, 0, 0, 1, 0, 0}, // 2.
+ 127   1          {0, 0, 0, 0, 1, 1, 0, 0}, // 3.
+ 128   1          {1, 0, 0, 1, 1, 0, 0, 0}, // 4.
+ 129   1          {0, 1, 0, 0, 1, 0, 0, 0}, // 5.
+ 130   1          {0, 1, 0, 0, 0, 0, 0, 0}, // 6.
+ 131   1          {0, 0, 0, 1, 1, 1, 1, 0}, // 7.
+ 132   1          {0, 0, 0, 0, 0, 0, 0, 0}, // 8.
+ 133   1          {0, 0, 0, 0, 1, 0, 0, 0}, // 9.
+ 134   1          {1, 1, 1, 1, 1, 1, 0, 0}, // -.
+ 135   1          {0, 0, 0, 0, 0, 0, 1, 1}, // 0
+ 136   1          {1, 0, 0, 1, 1, 1, 1, 1}, // 1
+ 137   1          {0, 0, 1, 0, 0, 1, 0, 1}, // 2
+ 138   1          {0, 0, 0, 0, 1, 1, 0, 1}, // 3
+ 139   1          {1, 0, 0, 1, 1, 0, 0, 1}, // 4
+ 140   1          {0, 1, 0, 0, 1, 0, 0, 1}, // 5
+ 141   1          {0, 1, 0, 0, 0, 0, 0, 1}, // 6
+ 142   1          {0, 0, 0, 1, 1, 1, 1, 1}, // 7
+ 143   1          {0, 0, 0, 0, 0, 0, 0, 1}, // 8
+ 144   1          {0, 0, 0, 0, 1, 0, 0, 1}, // 9
+ 145   1          {1, 1, 1, 1, 1, 1, 0, 1}, // -
+ 146   1          {0, 0, 0, 1, 0, 0, 0, 1}, // A
+ 147   1          {1, 1, 0, 0, 0, 0, 0, 1}, // b
+ 148   1          {0, 1, 1, 0, 0, 0, 1, 1}, // C
+ 149   1          {1, 0, 0, 0, 0, 1, 0, 1}, // d
+ 150   1        };
+ 151   1      
+ 152   1        segA1 = segments[digitMSB][0];
+ 153   1        segB1 = segments[digitMSB][1];
+ 154   1        segC1 = segments[digitMSB][2];
+ 155   1        segD1 = segments[digitMSB][3];
+ 156   1        segE1 = segments[digitMSB][4];
+ 157   1        segF1 = segments[digitMSB][5];
+ 158   1        segG1 = segments[digitMSB][6];
+ 159   1        segDP1 = segments[digitMSB][7]; 
+ 160   1        
+ 161   1        segA2 = segments[digitLSB][0];
+ 162   1        segB2 = segments[digitLSB][1];
+ 163   1        segC2 = segments[digitLSB][2];
+ 164   1        segD2 = segments[digitLSB][3];
+ 165   1        segE2 = segments[digitLSB][4];
+ 166   1        segF2 = segments[digitLSB][5];
+ 167   1        segG2 = segments[digitLSB][6];
+ 168   1        segDP2 = segments[digitLSB][7];
+ 169   1        
+ 170   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    539    ----
+   CONSTANT SIZE    =    432    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3    ----
+C51 COMPILER V9.60.7.0   PROJETO                                                           05/17/2024 18:36:50 PAGE 4   
+
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
