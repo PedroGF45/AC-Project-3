@@ -1,33 +1,36 @@
 #include <reg51.h>
 
 #define tenthSecond					2 //time to count 0,1 seconds (2 x 50ms)
-#define null							 	0	//Position in matrice null
-#define zeroDot							1	//Position of 0. in matrice
-#define oneDot							2	//Position of 1. in matrice
-#define twoDot							3	//Position of 2. in matrice
-#define threeDot						4	//Position of 3. in matrice
-#define fourDot							5	//Position of 4. in matrice
-#define fiveDot							6	//Position of 5. in matrice
-#define sixDot							7	//Position of 6. in matrice
-#define sevenDot						8	//Position of 7. in matrice
-#define eightDot						9	//Position of 8. in matrice
-#define nineDot							10	//Position of 9. in matrice
-#define hifenDot						11	//Position of -. in matrice
-#define zero								12	//Position of 0 in matrice
-#define one									13	//Position of 1 in matrice
-#define two									14	//Position of 2 in matrice
-#define three								15	//Position of 3 in matrice
-#define four								16	//Position of 4 in matrice
-#define five								17	//Position of 5 in matrice
-#define six									18	//Position of 6 in matrice
-#define seven								19	//Position of 7 in matrice
-#define eight								20	//Position of 8 in matrice
-#define nine								21  //Position of 9 in matrice
-#define hifen								22	//Position of - in matrice
-#define a										23	//Position of A in matrice
-#define b										24	//Position of b in matrice
-#define c										25  //Position of C in matrice
-#define d										26	//Position of d in matrice
+#define second 							20 // time to count 1 second (20 x 50ms)
+
+// values for display
+#define null							 	0xFF	
+#define zeroDot							0x02	
+#define oneDot							0x9E	
+#define twoDot							0x24	
+#define threeDot						0x0C	
+#define fourDot							0x98	
+#define fiveDot							0x48	
+#define sixDot							0x40	
+#define sevenDot						0x1E	
+#define eightDot						0x00	
+#define nineDot							0x08	
+#define hifenDot						0xFC	
+#define zero								0x03	
+#define one									0x9F	
+#define two									0x25	
+#define three								0x0D	
+#define four								0x99	
+#define five								0x49	
+#define six									0x41	
+#define seven								0x1F	
+#define eight								0x01	
+#define nine								0x09  
+#define hifen								0xFD	
+#define a										0x11	
+#define b										0xC1	
+#define c										0x63 	
+#define d										0x85	
 
 // display 1 segmentation
 sbit segA1 = P1 ^ 0;
@@ -56,8 +59,17 @@ sbit BB = P3^5;
 sbit BC = P3^6;
 sbit BD = P3^7;
 
-unsigned char counter = 0; // variavel que incrementa cada vez que timer conta 50ms
-int i = 0;				 // variavel para assinalar o estado da informa??o nos displays
+bit pressM = 0;
+bit pressA = 0;
+bit pressB = 0;
+bit pressC = 0;
+bit pressD = 0;
+bit waitingState = 1;
+bit changeDisplay = 0;
+
+int counter = 0; 		
+int counter1 = 0; 
+int i = 0;				 
 
 
 //Function declarations
@@ -69,102 +81,150 @@ void main (void)
 {	
 	Init(); 
 
-    while(1)                // infinite loop
-    {
-			//----------------------------------atualiza informa??o nos displays
-			display(i, i);
+    while(1) {
+			
+			// button has been pressed to start counting
+			if (~waitingState) {
+				
+				unsigned char D1;
+				unsigned char D2;
+				
+				if (changeDisplay) {
+					
+					if (counter >= (4*second)) {
+						
+						D1 = zeroDot;
+						
+					} else if (counter >= (3*second)) {
+						
+						D1 = oneDot;
+						
+					} else if (counter >= (2*second)) {
+						
+						D1 = twoDot;
+						
+					} else if (counter >= second) {
+						
+						D1 = threeDot;
+						
+					} else if (counter >= 0) {
+						
+						D1 = fourDot;
+						
+					}
+					
+					if (counter1 >= (9*tenthSecond)) {
+						
+						D2 = zero;
+						
+					} else if (counter1 >= (8*tenthSecond)) {
+						
+						D2 = one;
+						
+					} else if (counter1 >= (7*tenthSecond)) {
+						
+						D2 = two;
+						
+					} else if (counter1 >= (6*tenthSecond)) {
+						
+						D2 = three;
+						
+					} else if (counter1 >= (5*tenthSecond)) {
+						
+						D2 = four;
+						
+					} else if (counter1 >= (4*tenthSecond)) {
+						
+						D2 = five;
+						
+					} else if (counter1 >= (3*tenthSecond)) {
+						
+						D2 = six;
+						
+					} else if (counter1 >= (2*tenthSecond)) {
+						
+						D2 = seven;
+						
+					} else if (counter1 >= tenthSecond) {
+						
+						D2 = eight;
+						
+					} else if (counter1 >= 0) {
+						
+						D2 = nine;
+						
+					}
 
-			}	
+					display(D1, D2);
+					
+				}
+				
+			}
+						
+		}	
 }
-void Init(void)
-{
+void Init(void){
 	//Configuration of interruptions
 	EA = 1; //ativate global interruptions
 	ET0 = 1; // activate timer interruption 0
 	EX0 = 1; // activate external interruption 0
 	
 	//Configure TMOD
-	TMOD &= 0xF0; //Clean initial 4 bits of timer 0
+	TMOD &= 0xF0; //Clean initial 4 bits of timer 0 and 1
 	TMOD |= 0x01; //Set timer 0 with 16 bits
 	
 	//Configure timer 0
-	//Timer 0 - 5ms -> (65536(10000h) - 50000(C350h)= 15536(3CB0h))
+	//Timer 0 - 50ms -> (65536(10000h) - 50000(3E8h) = 15536(3CB0h))
 	TH0 = 0x3C;	
 	TL0 = 0xB0;
-	
+
+
 	//Configure TCON
-	TR0 = 1; //enable timer 0
-	IT0 = 0; //specify falling edge trigger on external interruption 0
+	IT0 = 1; //specify falling edge trigger on external interruption 0
+	
+	display(fiveDot, zero);
 }
 
-//interrupcao tempo 0 para contar tempo de 5ms de debounce
-void Timer0_ISR (void) interrupt 1
-{	
+void Timer0_ISR (void) interrupt 1 {	
+	
+	//Configure timer 0
 	//Timer 0 - 50ms -> (65536(10000h) - 50000(C350h)= 15536(3CB0h))
-	//Because its not auto reloaded, need to specify values again
 	TH0 = 0x3C;	
 	TL0 = 0xB0;
+
+	counter++;
+	counter1++;
 	
-	counter++;											//Increase Counter
+	changeDisplay = 1;
 	
-	if(counter > tenthSecond){					// check if gets past 0.1s
-		if (i <= d) {
-			i++;
-		}	else {
-			i = 0;
-		}
-		counter = 0;									//reset ? vari?vel
+	if(counter >= (5*second)){			// check if gets past 5s
+		counter = 0;									
 	}
+	
+	if(counter >= second) {  // check if pass 1s
+		counter1 = 0;
+	}
+		
+}
+
+
+void External0_ISR (void) interrupt 0 {
+	
+
+	if (waitingState) {
+		waitingState = ~waitingState; // start counting time
+		TR0 = 1;
+	}
+	
+	
 }
 
 void display(unsigned char digitMSB, unsigned char digitLSB)
 {
-	code unsigned segments[27][8] = {
-		{1, 1, 1, 1, 1, 1, 1, 1}, // null
-		{0, 0, 0, 0, 0, 0, 1, 0}, // 0.
-		{1, 0, 0, 1, 1, 1, 1, 0}, // 1.
-		{0, 0, 1, 0, 0, 1, 0, 0}, // 2.
-		{0, 0, 0, 0, 1, 1, 0, 0}, // 3.
-		{1, 0, 0, 1, 1, 0, 0, 0}, // 4.
-		{0, 1, 0, 0, 1, 0, 0, 0}, // 5.
-		{0, 1, 0, 0, 0, 0, 0, 0}, // 6.
-		{0, 0, 0, 1, 1, 1, 1, 0}, // 7.
-		{0, 0, 0, 0, 0, 0, 0, 0}, // 8.
-		{0, 0, 0, 0, 1, 0, 0, 0}, // 9.
-		{1, 1, 1, 1, 1, 1, 0, 0}, // -.
-		{0, 0, 0, 0, 0, 0, 1, 1}, // 0
-		{1, 0, 0, 1, 1, 1, 1, 1}, // 1
-		{0, 0, 1, 0, 0, 1, 0, 1}, // 2
-		{0, 0, 0, 0, 1, 1, 0, 1}, // 3
-		{1, 0, 0, 1, 1, 0, 0, 1}, // 4
-		{0, 1, 0, 0, 1, 0, 0, 1}, // 5
-		{0, 1, 0, 0, 0, 0, 0, 1}, // 6
-		{0, 0, 0, 1, 1, 1, 1, 1}, // 7
-		{0, 0, 0, 0, 0, 0, 0, 1}, // 8
-		{0, 0, 0, 0, 1, 0, 0, 1}, // 9
-		{1, 1, 1, 1, 1, 1, 0, 1}, // -
-		{0, 0, 0, 1, 0, 0, 0, 1}, // A
-		{1, 1, 0, 0, 0, 0, 0, 1}, // b
-		{0, 1, 1, 0, 0, 0, 1, 1}, // C
-		{1, 0, 0, 0, 0, 1, 0, 1}, // d
-	};
 
-	segA1 = segments[digitMSB][0];
-	segB1 = segments[digitMSB][1];
-	segC1 = segments[digitMSB][2];
-	segD1 = segments[digitMSB][3];
-	segE1 = segments[digitMSB][4];
-	segF1 = segments[digitMSB][5];
-	segG1 = segments[digitMSB][6];
-	segDP1 = segments[digitMSB][7];	
+	changeDisplay = 0;
 	
-	segA2 = segments[digitLSB][0];
-	segB2 = segments[digitLSB][1];
-	segC2 = segments[digitLSB][2];
-	segD2 = segments[digitLSB][3];
-	segE2 = segments[digitLSB][4];
-	segF2 = segments[digitLSB][5];
-	segG2 = segments[digitLSB][6];
-	segDP2 = segments[digitLSB][7];
-	
+	P1 = digitMSB;
+	P2 = digitLSB;
+
 }
