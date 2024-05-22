@@ -46,7 +46,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\Objects\</OutputDirectory>
-          <OutputName>ProjetoC</OutputName>
+          <OutputName>ProjetoAssembly</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>1</CreateHexFile>
@@ -377,9 +377,9 @@
           <GroupName>Source Group 1</GroupName>
           <Files>
             <File>
-              <FileName>projetoC.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\projetoC.c</FilePath>
+              <FileName>projetoAssembly.a51</FileName>
+              <FileType>2</FileType>
+              <FilePath>.\projetoAssembly.a51</FilePath>
             </File>
           </Files>
         </Group>

@@ -132,10 +132,27 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGDP51</Key>
-          <Name>(98=1529,504,1872,798,0)(82=1232,186,1440,301,0)(83=1503,104,1711,219,0)(84=1495,210,1703,325,0)(85=1513,322,1721,437,0)(80=-1,-1,-1,-1,0)(91=1311,475,1521,750,0)(92=1708,104,1918,379,0)(5023=-1,-1,-1,-1,0)</Name>
+          <Name>(98=1097,504,1440,798,0)(82=1232,186,1440,301,0)(83=828,95,1036,210,1)(84=1027,95,1235,210,1)(85=1128,243,1336,358,1)(80=-1,-1,-1,-1,0)(91=1230,475,1440,750,0)(92=1230,104,1440,379,0)(5023=-1,-1,-1,-1,0)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint/>
+      <Breakpoint>
+        <Bp>
+          <Number>0</Number>
+          <Type>0</Type>
+          <LineNumber>261</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>-16772942</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>projetoAssembly.a51</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
+      </Breakpoint>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
@@ -198,12 +215,12 @@
     <File>
       <GroupNumber>1</GroupNumber>
       <FileNumber>1</FileNumber>
-      <FileType>1</FileType>
+      <FileType>2</FileType>
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\projetoC.c</PathWithFileName>
-      <FilenameWithoutPath>projetoC.c</FilenameWithoutPath>
+      <PathWithFileName>.\projetoAssembly.a51</PathWithFileName>
+      <FilenameWithoutPath>projetoAssembly.a51</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

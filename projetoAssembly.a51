@@ -17,28 +17,28 @@ TLtimer 		EQU 	0xB0	;Timer 0 - 50ms -> (65536(10000h) - 50000(3E8h) = 15536(3CB0
 
 ; values for display
 null			EQU		0xFF	
-zeroDot			EQU		0x02	
-oneDot			EQU		0x9E	
+zeroDot			EQU		0x40	
+oneDot			EQU		0x79	
 twoDot			EQU		0x24	
-threeDot 		EQU		0x0C	
-fourDot			EQU		0x98
-fiveDot			EQU 	0x48	
-hifenDot		EQU		0xFC
-zero			EQU		0x03	
-one				EQU		0x9F	
-two				EQU		0x25	
-three			EQU		0x0D	
+threeDot 		EQU		0x30	
+fourDot			EQU		0x19
+fiveDot			EQU 	0x12	
+hifenDot		EQU		0x3F
+zero			EQU		0xC0	
+one				EQU		0xF9	
+two				EQU		0xA4	
+three			EQU		0xB0	
 four			EQU		0x99	
-five			EQU		0x49	
-six				EQU		0x41	
-seven			EQU		0x1F	
-eight			EQU		0x01	
-nine			EQU		0x09  
-hifen			EQU		0xFD	
-aLetter			EQU		0x11	
-bLetter			EQU		0xC1	
-cLetter			EQU		0x63 	
-dLetter			EQU		0x85	
+five			EQU		0x92	
+six				EQU		0x82	
+seven			EQU		0xF8	
+eight			EQU		0x80	
+nine			EQU		0x90  
+hifen			EQU		0xBF	
+aLetter			EQU		0x88	
+bLetter			EQU		0x83	
+cLetter			EQU		0xC6 	
+dLetter			EQU		0xA1	
 
 
 ; Buttons definition

@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 01:00:11 PAGE 1   
+C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 12:59:53 PAGE 1   
 
 
 C51 COMPILER V9.60.7.0, COMPILATION OF MODULE PROJETOC
@@ -15,28 +15,28 @@ line level    source
    5          
    6          // values for display
    7          #define null                0xFF  
-   8          #define zeroDot             0x02  
-   9          #define oneDot              0x9E  
+   8          #define zeroDot             0x40  
+   9          #define oneDot              0x79  
   10          #define twoDot              0x24  
-  11          #define threeDot            0x0C  
-  12          #define fourDot             0x98  
-  13          #define fiveDot             0x48
-  14          #define hifenDot            0xFC
-  15          #define zero                0x03  
-  16          #define one                 0x9F  
-  17          #define two                 0x25  
-  18          #define three               0x0D  
+  11          #define threeDot            0x30  
+  12          #define fourDot             0x19
+  13          #define fiveDot             0x12
+  14          #define hifenDot            0x3F
+  15          #define zero                0xC0  
+  16          #define one                 0xF9  
+  17          #define two                 0xA4  
+  18          #define three               0xB0  
   19          #define four                0x99  
-  20          #define five                0x49  
-  21          #define six                 0x41  
-  22          #define seven               0x1F  
-  23          #define eight               0x01  
-  24          #define nine                0x09  
-  25          #define hifen               0xFD  
-  26          #define aLetter             0x11  
-  27          #define bLetter             0xC1  
-  28          #define cLetter             0x63  
-  29          #define dLetter             0x85  
+  20          #define five                0x92  
+  21          #define six                 0x82  
+  22          #define seven               0xF8  
+  23          #define eight               0x80  
+  24          #define nine                0x90  
+  25          #define hifen               0xBF  
+  26          #define aLetter             0x88  
+  27          #define bLetter             0x83  
+  28          #define cLetter             0xC6  
+  29          #define dLetter             0xA1  
   30          
   31          
   32          // Buttons definition
@@ -58,15 +58,15 @@ line level    source
   48          unsigned int counter = 0;     
   49          unsigned int counter1 = 0; 
   50          
-  51          unsigned int D1;
-  52          unsigned int D2;
+  51          unsigned char D1;
+  52          unsigned char D2;
   53          
   54          
-C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 01:00:11 PAGE 2   
+C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 12:59:53 PAGE 2   
 
   55          //Function declarations
   56          void Init(void);
-  57          void display(unsigned int Display1, unsigned int Display2);
+  57          void display(unsigned char Display1, unsigned char Display2);
   58          
   59          void main (void)
   60          { 
@@ -126,7 +126,7 @@ line level    source
  114   5                  
  115   5                  D2 = three;
  116   5                  D2changed = 1;
-C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 01:00:11 PAGE 3   
+C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 12:59:53 PAGE 3   
 
  117   5                  
  118   5                } else if (counter1 == (5*tenthSecond) && D2changed == 0) {
@@ -161,7 +161,7 @@ line level    source
  147   5                  
  148   5                }
  149   4      
- 150   4                if (D1changed == 1 || D2changed == 1) {
+ 150   4                if (D2changed == 1 || D2changed == 1) {
  151   5                  
  152   5                  display(D1, D2);
  153   5                  
@@ -172,14 +172,14 @@ line level    source
  158   3              // answer state
  159   3              if (answerState == 1) {
  160   4                
- 161   4                if (counter == (2*second) && D1changed == 0) {
+ 161   4                if (counter == (2*second) && D2changed == 0) {
  162   5                    
  163   5                    display(D1, D2);
  164   5                    
  165   5                    counter = 0; // repeat the cycle
  166   5                    
  167   5                  
- 168   5                } else if (counter == second && D1changed == 0) {
+ 168   5                } else if (counter == second && D2changed == 0) {
  169   5                  
  170   5                  if (pressA == 1) {
  171   6                    
@@ -190,7 +190,7 @@ line level    source
  176   6                    display(hifenDot, bLetter);
  177   6                    
  178   6                  } else if (pressC == 1) {
-C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 01:00:11 PAGE 4   
+C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 12:59:53 PAGE 4   
 
  179   6                    
  180   6                    display(hifenDot, cLetter);
@@ -254,7 +254,7 @@ line level    source
  238   1        if (counter % second == 0) {
  239   2          
  240   2          D1changed = 0;
-C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 01:00:11 PAGE 5   
+C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 12:59:53 PAGE 5   
 
  241   2          
  242   2        }
@@ -318,7 +318,7 @@ line level    source
  300   2          
  301   2          //Timer 0 - 50ms -> (65536(10000h) - 50000(3E8h) = 15536(3CB0h))
  302   2          TH0 = 0x3C; 
-C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 01:00:11 PAGE 6   
+C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 12:59:53 PAGE 6   
 
  303   2          TL0 = 0xB0;
  304   2          //Timer 1 - 50ms -> (65536(10000h) - 50000(3E8h) = 15536(3CB0h))
@@ -382,7 +382,7 @@ line level    source
  362   3          
  363   3          } else if (~BC) {
  364   3          
-C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 01:00:11 PAGE 7   
+C51 COMPILER V9.60.7.0   PROJETOC                                                          05/22/2024 12:59:53 PAGE 7   
 
  365   3            pressC = 1;
  366   3            
@@ -407,7 +407,7 @@ line level    source
  385   1        
  386   1      }
  387          
- 388          void display(unsigned int Display1, unsigned int Display2)
+ 388          void display(unsigned char Display1, unsigned char Display2)
  389          {
  390   1      
  391   1        P1 = Display1;
@@ -417,11 +417,11 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    842    ----
+   CODE SIZE        =    767    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      8    ----
+   DATA SIZE        =      6    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =      9    ----
 END OF MODULE INFORMATION.

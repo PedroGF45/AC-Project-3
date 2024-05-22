@@ -1,4 +1,4 @@
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     1
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE     1
 
 
 MACRO ASSEMBLER A51 V8.2.7.0
@@ -30,28 +30,28 @@ LOC  OBJ            LINE     SOURCE
                       17     
                       18     ; values for display
   00FF                19     null                    EQU             0xFF    
-  0002                20     zeroDot                 EQU             0x02    
-  009E                21     oneDot                  EQU             0x9E    
+  0040                20     zeroDot                 EQU             0x40    
+  0079                21     oneDot                  EQU             0x79    
   0024                22     twoDot                  EQU             0x24    
-  000C                23     threeDot                EQU             0x0C    
-  0098                24     fourDot                 EQU             0x98
-  0048                25     fiveDot                 EQU     0x48    
-  00FC                26     hifenDot                EQU             0xFC
-  0003                27     zero                    EQU             0x03    
-  009F                28     one                             EQU             0x9F    
-  0025                29     two                             EQU             0x25    
-  000D                30     three                   EQU             0x0D    
+  0030                23     threeDot                EQU             0x30    
+  0019                24     fourDot                 EQU             0x19
+  0012                25     fiveDot                 EQU     0x12    
+  003F                26     hifenDot                EQU             0x3F
+  00C0                27     zero                    EQU             0xC0    
+  00F9                28     one                             EQU             0xF9    
+  00A4                29     two                             EQU             0xA4    
+  00B0                30     three                   EQU             0xB0    
   0099                31     four                    EQU             0x99    
-  0049                32     five                    EQU             0x49    
-  0041                33     six                             EQU             0x41    
-  001F                34     seven                   EQU             0x1F    
-  0001                35     eight                   EQU             0x01    
-  0009                36     nine                    EQU             0x09  
-  00FD                37     hifen                   EQU             0xFD    
-  0011                38     aLetter                 EQU             0x11    
-  00C1                39     bLetter                 EQU             0xC1    
-  0063                40     cLetter                 EQU             0x63    
-  0085                41     dLetter                 EQU             0x85    
+  0092                32     five                    EQU             0x92    
+  0082                33     six                             EQU             0x82    
+  00F8                34     seven                   EQU             0xF8    
+  0080                35     eight                   EQU             0x80    
+  0090                36     nine                    EQU             0x90  
+  00BF                37     hifen                   EQU             0xBF    
+  0088                38     aLetter                 EQU             0x88    
+  0083                39     bLetter                 EQU             0x83    
+  00C6                40     cLetter                 EQU             0xC6    
+  00A1                41     dLetter                 EQU             0xA1    
                       42     
                       43     
                       44     ; Buttons definition
@@ -65,7 +65,7 @@ LOC  OBJ            LINE     SOURCE
   0000                52     timeState               EQU     0               ; R1 bank 0
   0000                53     answerState     EQU     0               ; R2 bank 0
   0000                54     D1changed               EQU     0               ; R3 bank 0
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     2
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE     2
 
   0000                55     D2changed               EQU     0               ; R4 bank 0
                       56     
@@ -109,8 +109,8 @@ LOC  OBJ            LINE     SOURCE
                       93             ; select bank 1
 1009 D2D3             94             SETB PSW.3                                      
                       95             
-100B 7848             96             MOV R0, #fiveDot
-100D 7903             97             MOV R1, #zero
+100B 7812             96             MOV R0, #fiveDot
+100D 79C0             97             MOV R1, #zero
                       98             
                       99             ; select bank 0                                 
 100F C2D3            100             CLR PSW.3
@@ -132,8 +132,8 @@ LOC  OBJ            LINE     SOURCE
 1020 D2D3            115                     SETB PSW.3                                      
                      116                      
                      117                     
-1022 7802            118                     MOV R0, #zeroDot
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     3
+1022 7840            118                     MOV R0, #zeroDot
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE     3
 
                      119                     
                      120                     ; select bank 0
@@ -154,7 +154,7 @@ LOC  OBJ            LINE     SOURCE
 1033 D2D3            134                     SETB PSW.3                                      
                      135                      
                      136                     
-1035 789E            137                     MOV R0, #oneDot
+1035 7879            137                     MOV R0, #oneDot
                      138                     
                      139                     ; select bank 0
                      140                                                             
@@ -192,7 +192,7 @@ LOC  OBJ            LINE     SOURCE
 1058 D2D3            171                     SETB PSW.3                                      
                      172                      
                      173                     
-105A 780C            174                     MOV R0, #threeDot
+105A 7830            174                     MOV R0, #threeDot
                      175                     
                      176                     ; select bank 0
                      177                                                             
@@ -201,7 +201,7 @@ LOC  OBJ            LINE     SOURCE
 105E 7B01            180                     MOV R3, #1 ; D1changed = 1
 1060 5115            181                     CALL Display
 1062 8017            182                     JMP ZeroTenthSecondsR
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     4
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE     4
 
                      183                     
 1064                 184             FourSecondsR:
@@ -213,7 +213,7 @@ LOC  OBJ            LINE     SOURCE
 106D D2D3            190                     SETB PSW.3                                      
                      191                      
                      192                     
-106F 7898            193                     MOV R0, #fourDot
+106F 7819            193                     MOV R0, #fourDot
                      194                     
                      195                     ; select bank 0
                      196                                                             
@@ -235,7 +235,7 @@ LOC  OBJ            LINE     SOURCE
 1082 D2D3            212                     SETB PSW.3                                      
                      213                      
                      214                     
-1084 7903            215                     MOV R1, #zero
+1084 79C0            215                     MOV R1, #zero
                      216                     
                      217                     ; select bank 0
                      218                                                             
@@ -254,7 +254,7 @@ LOC  OBJ            LINE     SOURCE
 1095 D2D3            231                     SETB PSW.3                                      
                      232                      
                      233                     
-1097 799F            234                     MOV R1, #one
+1097 79F9            234                     MOV R1, #one
                      235                     
                      236                     ; select bank 0
                      237                                                             
@@ -269,14 +269,14 @@ LOC  OBJ            LINE     SOURCE
 10A4 EE              246                     MOV A, R6
 10A5 B40E0C          247                     CJNE A, #sevenTenthSeconds, ThreeTenthSecondsR ; counter1 == 7 * tenthSecon
                              ds
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     5
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE     5
 
                      248             
                      249                     ; select bank 1
 10A8 D2D3            250                     SETB PSW.3                                      
                      251                      
                      252                     
-10AA 7925            253                     MOV R1, #two
+10AA 79A4            253                     MOV R1, #two
                      254                     
                      255                     ; select bank 0
                      256                                                             
@@ -295,7 +295,7 @@ LOC  OBJ            LINE     SOURCE
 10BB D2D3            269                     SETB PSW.3                                      
                      270                      
                      271                     
-10BD 790D            272                     MOV R1, #three
+10BD 79B0            272                     MOV R1, #three
                      273                     
                      274                     ; select bank 0
                      275                                                             
@@ -333,11 +333,11 @@ LOC  OBJ            LINE     SOURCE
 10E1 D2D3            307                     SETB PSW.3                                      
                      308                      
                      309                     
-10E3 7949            310                     MOV R1, #five
+10E3 7992            310                     MOV R1, #five
                      311                     
                      312                     ; select bank 0
                      313                                                             
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     6
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE     6
 
 10E5 C2D3            314                     CLR PSW.3
                      315                     
@@ -355,7 +355,7 @@ LOC  OBJ            LINE     SOURCE
 10F4 D2D3            326                     SETB PSW.3                                      
                      327                      
                      328                     
-10F6 7941            329                     MOV R1, #six
+10F6 7982            329                     MOV R1, #six
                      330                     
                      331                     ; select bank 0
                      332                                                             
@@ -374,7 +374,7 @@ LOC  OBJ            LINE     SOURCE
 1107 D2D3            345                     SETB PSW.3                                      
                      346                      
                      347                     
-1109 791F            348                     MOV R1, #seven
+1109 79F8            348                     MOV R1, #seven
                      349                     
                      350                     ; select bank 0
                      351                                                             
@@ -392,7 +392,7 @@ LOC  OBJ            LINE     SOURCE
 1119 D2D3            363                     SETB PSW.3                                      
                      364                      
                      365                     
-111B 7901            366                     MOV R1, #eight
+111B 7980            366                     MOV R1, #eight
                      367                     
                      368                     ; select bank 0
                      369                                                             
@@ -405,7 +405,7 @@ LOC  OBJ            LINE     SOURCE
 1125                 376             NineTenthSecondsR:
                      377             
 1125 BC0012          378                     CJNE R4, #0, CheckAnswerState; D2Changed == 0
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     7
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE     7
 
 1128 BE000F          379                     CJNE R6, #0, CheckAnswerState ; counter == 0
 112B B9010C          380                     CJNE R1, #1, CheckAnswerState ; timeState == 1
@@ -414,7 +414,7 @@ LOC  OBJ            LINE     SOURCE
 112E D2D3            383                     SETB PSW.3                                      
                      384                      
                      385                     
-1130 7909            386                     MOV R1, #nine
+1130 7990            386                     MOV R1, #nine
                      387                     
                      388                     ; select bank 0
                      389                                                             
@@ -455,9 +455,9 @@ LOC  OBJ            LINE     SOURCE
 1157 D2D3            424                             SETB PSW.3
                      425                             
 1159 E8              426                             MOV A, R0
-115A 78FC            427                             MOV R0, #hifenDot
+115A 783F            427                             MOV R0, #hifenDot
 115C 89F0            428                             MOV B, R1
-115E 7911            429                             MOV R1, #aLetter
+115E 7988            429                             MOV R1, #aLetter
                      430                             
 1160 C2D3            431                             CLR PSW.3
 1162 5115            432                             CALL Display
@@ -473,7 +473,7 @@ LOC  OBJ            LINE     SOURCE
 116B 8061            442                             JMP EndCycle
                      443                             
 116D                 444                     CheckB:
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     8
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE     8
 
                      445                             
 116D BB0116          446                             CJNE R3, #1, CheckC     ; pressB == 1
@@ -482,9 +482,9 @@ LOC  OBJ            LINE     SOURCE
 1170 D2D3            449                             SETB PSW.3
                      450                             
 1172 E8              451                             MOV A, R0
-1173 78FC            452                             MOV R0, #hifenDot
+1173 783F            452                             MOV R0, #hifenDot
 1175 89F0            453                             MOV B, R1
-1177 79C1            454                             MOV R1, #bLetter
+1177 7983            454                             MOV R1, #bLetter
                      455                             
 1179 C2D3            456                             CLR PSW.3
 117B 5115            457                             CALL Display
@@ -507,9 +507,9 @@ LOC  OBJ            LINE     SOURCE
 1189 D2D3            474                             SETB PSW.3
                      475                             
 118B E8              476                             MOV A, R0
-118C 78FC            477                             MOV R0, #hifenDot
+118C 783F            477                             MOV R0, #hifenDot
 118E 89F0            478                             MOV B, R1
-1190 7963            479                             MOV R1, #cLetter
+1190 79C6            479                             MOV R1, #cLetter
                      480                             
 1192 C2D3            481                             CLR PSW.3
 1194 5115            482                             CALL Display
@@ -532,16 +532,16 @@ LOC  OBJ            LINE     SOURCE
 11A2 D2D3            499                             SETB PSW.3
                      500                             
 11A4 E8              501                             MOV A, R0
-11A5 78FC            502                             MOV R0, #hifenDot
+11A5 783F            502                             MOV R0, #hifenDot
 11A7 89F0            503                             MOV B, R1
-11A9 7985            504                             MOV R1, #dLetter
+11A9 79A1            504                             MOV R1, #dLetter
                      505                             
 11AB C2D3            506                             CLR PSW.3
 11AD 5115            507                             CALL Display
                      508                             
                      509                             ; select bank 1
 11AF D2D3            510                             SETB PSW.3
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     9
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE     9
 
                      511                             
 11B1 F8              512                             MOV R0, A
@@ -557,9 +557,9 @@ LOC  OBJ            LINE     SOURCE
 11B8 D2D3            522                             SETB PSW.3
                      523                             
 11BA E8              524                             MOV A, R0
-11BB 78FC            525                             MOV R0, #hifenDot
+11BB 783F            525                             MOV R0, #hifenDot
 11BD 89F0            526                             MOV B, R1
-11BF 79FD            527                             MOV R1, #hifen
+11BF 79BF            527                             MOV R1, #hifen
                      528                             
 11C1 C2D3            529                             CLR PSW.3
 11C3 5115            530                             CALL Display
@@ -609,7 +609,7 @@ LOC  OBJ            LINE     SOURCE
 11F1 75A88F          574             MOV IE, #8FH                            ; EA=1, ET1=1, EX1=1, ET0=1 e EX0=1 -> IE=1
                              0001111
 11F4 75B800          575             MOV IP, #00H                            ; Don't change priorities
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    10
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE    10
 
 11F7 22              576             RET
                      577             
@@ -677,7 +677,7 @@ LOC  OBJ            LINE     SOURCE
                      636             
                      637             ; Reload timers
 1230 758C3C          638             MOV TH0, #THtimer                       ; set th0
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    11
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE    11
 
 1233 758A3C          639             MOV TL0, #THtimer                       ; set tl0 
 1236 758D3C          640             MOV TH1, #THtimer                       ; set th1
@@ -706,8 +706,8 @@ LOC  OBJ            LINE     SOURCE
 124F 7C00            663                     MOV R4, #0
 1251 7D00            664                     MOV R5, #0
                      665     
-1253 7848            666                     MOV R0, #fiveDot
-1255 7903            667                     MOV R1, #zero
+1253 7812            666                     MOV R0, #fiveDot
+1255 79C0            667                     MOV R1, #zero
                      668                     
                      669                     ; select bank 0
                      670                                                             
@@ -745,7 +745,7 @@ LOC  OBJ            LINE     SOURCE
 1273 BD6416          702             CJNE R5, #fiveSeconds, TimerInterruption0End ; counter == 5*second
                      703             
 1276 B80013          704             CJNE R0, #0, TimerInterruption0End ; waitingState == 0
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    12
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE    12
 
                      705             
 1279 B90110          706             CJNE R1, #1, TimerInterruption0End ; timeState == 1
@@ -762,8 +762,8 @@ LOC  OBJ            LINE     SOURCE
 1282 D2D3            717             SETB PSW.3                                      
                      718             
                      719             
-1284 7802            720             MOV R0, #zeroDot
-1286 7903            721             MOV R1, #zero
+1284 7840            720             MOV R0, #zeroDot
+1286 79C0            721             MOV R1, #zero
                      722             
                      723             ; select bank 0
                      724                                                     
@@ -813,7 +813,7 @@ LOC  OBJ            LINE     SOURCE
                      768                     
 12AD 7B01            769                     MOV R3, #1
                      770                     
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    13
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE    13
 
                      771                     ; select bank 0
                      772                                                             
@@ -881,7 +881,7 @@ LOC  OBJ            LINE     SOURCE
                      834             
 12E5 BE1402          835             CJNE R6, #second, TimerInterruption1End ; counter1 == second
                      836             
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    14
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE    14
 
 12E8 7E00            837             MOV R6, #0                                      ; counter1 = 0
                      838             
@@ -890,7 +890,7 @@ LOC  OBJ            LINE     SOURCE
 12EC 32              841                     RETI
                      842                     
                      843     END
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    15
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE    15
 
 SYMBOL TABLE LISTING
 ------ ----- -------
@@ -898,7 +898,7 @@ SYMBOL TABLE LISTING
 
 N A M E                   T Y P E  V A L U E   ATTRIBUTES
 
-ALETTER. . . . . . . . .  N NUMB   0011H   A   
+ALETTER. . . . . . . . .  N NUMB   0088H   A   
 ANSWERB. . . . . . . . .  C ADDR   12A8H   A   
 ANSWERC. . . . . . . . .  C ADDR   12B7H   A   
 ANSWERD. . . . . . . . .  C ADDR   12C6H   A   
@@ -908,14 +908,14 @@ BA . . . . . . . . . . .  B ADDR   00B0H.4 A
 BB . . . . . . . . . . .  B ADDR   00B0H.5 A   
 BC . . . . . . . . . . .  B ADDR   00B0H.6 A   
 BD . . . . . . . . . . .  B ADDR   00B0H.7 A   
-BLETTER. . . . . . . . .  N NUMB   00C1H   A   
+BLETTER. . . . . . . . .  N NUMB   0083H   A   
 CHECKANSWERSTATE . . . .  C ADDR   113AH   A   
 CHECKANSWERSTATE1. . . .  C ADDR   1079H   A   
 CHECKB . . . . . . . . .  C ADDR   116DH   A   
 CHECKC . . . . . . . . .  C ADDR   1186H   A   
 CHECKD . . . . . . . . .  C ADDR   119FH   A   
 CHECKNONE. . . . . . . .  C ADDR   11B8H   A   
-CLETTER. . . . . . . . .  N NUMB   0063H   A   
+CLETTER. . . . . . . . .  N NUMB   00C6H   A   
 CONFIGUREINTERRUPTIONS .  C ADDR   11F8H   A   
 COUNTER. . . . . . . . .  N NUMB   0000H   A   
 COUNTER1 . . . . . . . .  N NUMB   0000H   A   
@@ -924,8 +924,8 @@ D1CHANGED. . . . . . . .  N NUMB   0000H   A
 D2 . . . . . . . . . . .  N NUMB   0000H   A   
 D2CHANGED. . . . . . . .  N NUMB   0000H   A   
 DISPLAY. . . . . . . . .  C ADDR   1215H   A   
-DLETTER. . . . . . . . .  N NUMB   0085H   A   
-EIGHT. . . . . . . . . .  N NUMB   0001H   A   
+DLETTER. . . . . . . . .  N NUMB   00A1H   A   
+EIGHT. . . . . . . . . .  N NUMB   0080H   A   
 EIGHTTENTHSECONDS. . . .  N NUMB   0010H   A   
 EIGHTTENTHSECONDSR . . .  C ADDR   1113H   A   
 ENABLEINTERRUPTIONS. . .  C ADDR   11F1H   A   
@@ -935,35 +935,35 @@ EXTERNALINTERRUPTION0. .  C ADDR   121EH   A
 EXTERNALINTERRUPTION0END  C ADDR   1263H   A   
 EXTERNALINTERRUPTION1. .  C ADDR   128FH   A   
 EXTERNALINTERRUPTION1END  C ADDR   12D5H   A   
-FIVE . . . . . . . . . .  N NUMB   0049H   A   
-FIVEDOT. . . . . . . . .  N NUMB   0048H   A   
+FIVE . . . . . . . . . .  N NUMB   0092H   A   
+FIVEDOT. . . . . . . . .  N NUMB   0012H   A   
 FIVESECONDS. . . . . . .  N NUMB   0064H   A   
 FIVETENTHSECONDS . . . .  N NUMB   000AH   A   
 FIVETENTHSECONDSR. . . .  C ADDR   10DAH   A   
 FOR. . . . . . . . . . .  C ADDR   1013H   A   
 FOUR . . . . . . . . . .  N NUMB   0099H   A   
-FOURDOT. . . . . . . . .  N NUMB   0098H   A   
+FOURDOT. . . . . . . . .  N NUMB   0019H   A   
 FOURSECONDS. . . . . . .  N NUMB   0050H   A   
 FOURSECONDSR . . . . . .  C ADDR   1064H   A   
 FOURTENTHSECONDS . . . .  N NUMB   0008H   A   
 FOURTENTHSECONDSR. . . .  C ADDR   10C7H   A   
-HIFEN. . . . . . . . . .  N NUMB   00FDH   A   
-HIFENDOT . . . . . . . .  N NUMB   00FCH   A   
+HIFEN. . . . . . . . . .  N NUMB   00BFH   A   
+HIFENDOT . . . . . . . .  N NUMB   003FH   A   
 IE . . . . . . . . . . .  D ADDR   00A8H   A   
 INITIALIZATIONS. . . . .  C ADDR   11D2H   A   
 IP . . . . . . . . . . .  D ADDR   00B8H   A   
 IT0. . . . . . . . . . .  B ADDR   0088H.0 A   
 IT1. . . . . . . . . . .  B ADDR   0088H.2 A   
 MAIN . . . . . . . . . .  C ADDR   1000H   A   
-NINE . . . . . . . . . .  N NUMB   0009H   A   
+NINE . . . . . . . . . .  N NUMB   0090H   A   
 NINETENTHSECONDS . . . .  N NUMB   0012H   A   
 NINETENTHSECONDSR. . . .  C ADDR   1125H   A   
-A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    16
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 13:09:03 PAGE    16
 
 NOTWAITING . . . . . . .  C ADDR   1242H   A   
 NULL . . . . . . . . . .  N NUMB   00FFH   A   
-ONE. . . . . . . . . . .  N NUMB   009FH   A   
-ONEDOT . . . . . . . . .  N NUMB   009EH   A   
+ONE. . . . . . . . . . .  N NUMB   00F9H   A   
+ONEDOT . . . . . . . . .  N NUMB   0079H   A   
 ONESECONDANSWER. . . . .  C ADDR   114CH   A   
 ONESECONDR . . . . . . .  C ADDR   102CH   A   
 ONETENTHSECONDSR . . . .  C ADDR   108EH   A   
@@ -976,10 +976,10 @@ PRESSC . . . . . . . . .  N NUMB   0000H   A
 PRESSD . . . . . . . . .  N NUMB   0000H   A   
 PSW. . . . . . . . . . .  D ADDR   00D0H   A   
 SECOND . . . . . . . . .  N NUMB   0014H   A   
-SEVEN. . . . . . . . . .  N NUMB   001FH   A   
+SEVEN. . . . . . . . . .  N NUMB   00F8H   A   
 SEVENTENTHSECONDS. . . .  N NUMB   000EH   A   
 SEVENTENTHSECONDSR . . .  C ADDR   1100H   A   
-SIX. . . . . . . . . . .  N NUMB   0041H   A   
+SIX. . . . . . . . . . .  N NUMB   0082H   A   
 SIXTENTHSECONDS. . . . .  N NUMB   000CH   A   
 SIXTENTHSECONDSR . . . .  C ADDR   10EDH   A   
 SP . . . . . . . . . . .  D ADDR   0081H   A   
@@ -987,8 +987,8 @@ STACKPOINTER . . . . . .  N NUMB   000FH   A
 TENTHSECOND. . . . . . .  N NUMB   0002H   A   
 TH0. . . . . . . . . . .  D ADDR   008CH   A   
 TH1. . . . . . . . . . .  D ADDR   008DH   A   
-THREE. . . . . . . . . .  N NUMB   000DH   A   
-THREEDOT . . . . . . . .  N NUMB   000CH   A   
+THREE. . . . . . . . . .  N NUMB   00B0H   A   
+THREEDOT . . . . . . . .  N NUMB   0030H   A   
 THREESECONDS . . . . . .  N NUMB   003CH   A   
 THREESECONDSR. . . . . .  C ADDR   1052H   A   
 THREETENTHSECONDS. . . .  N NUMB   0006H   A   
@@ -1005,15 +1005,15 @@ TLTIMER. . . . . . . . .  N NUMB   00B0H   A
 TMOD . . . . . . . . . .  D ADDR   0089H   A   
 TR0. . . . . . . . . . .  B ADDR   0088H.4 A   
 TR1. . . . . . . . . . .  B ADDR   0088H.6 A   
-TWO. . . . . . . . . . .  N NUMB   0025H   A   
+TWO. . . . . . . . . . .  N NUMB   00A4H   A   
 TWODOT . . . . . . . . .  N NUMB   0024H   A   
 TWOSECONDS . . . . . . .  N NUMB   0028H   A   
 TWOSECONDSR. . . . . . .  C ADDR   103FH   A   
 TWOTENTHSECONDS. . . . .  N NUMB   0004H   A   
 TWOTENTHSECONDSR . . . .  C ADDR   10A1H   A   
 WAITINGSTATE . . . . . .  N NUMB   0001H   A   
-ZERO . . . . . . . . . .  N NUMB   0003H   A   
-ZERODOT. . . . . . . . .  N NUMB   0002H   A   
+ZERO . . . . . . . . . .  N NUMB   00C0H   A   
+ZERODOT. . . . . . . . .  N NUMB   0040H   A   
 ZEROTENTHSECONDSR. . . .  C ADDR   107BH   A   
 
 

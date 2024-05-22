@@ -5,28 +5,28 @@
 
 // values for display
 #define null							 	0xFF	
-#define zeroDot							0x02	
-#define oneDot							0x9E	
+#define zeroDot							0x40	
+#define oneDot							0x79	
 #define twoDot							0x24	
-#define threeDot						0x0C	
-#define fourDot							0x98	
-#define fiveDot							0x48
-#define hifenDot						0xFC
-#define zero								0x03	
-#define one									0x9F	
-#define two									0x25	
-#define three								0x0D	
+#define threeDot						0x30	
+#define fourDot							0x19
+#define fiveDot							0x12
+#define hifenDot						0x3F
+#define zero								0xC0	
+#define one									0xF9	
+#define two									0xA4	
+#define three								0xB0	
 #define four								0x99	
-#define five								0x49	
-#define six									0x41	
-#define seven								0x1F	
-#define eight								0x01	
-#define nine								0x09  
-#define hifen								0xFD	
-#define aLetter							0x11	
-#define bLetter							0xC1	
-#define cLetter							0x63 	
-#define dLetter							0x85	
+#define five								0x92	
+#define six									0x82	
+#define seven								0xF8	
+#define eight								0x80	
+#define nine								0x90  
+#define hifen								0xBF	
+#define aLetter							0x88	
+#define bLetter							0x83	
+#define cLetter							0xC6 	
+#define dLetter							0xA1	
 
 
 // Buttons definition
@@ -48,13 +48,13 @@ bit D2changed = 0;
 unsigned int counter = 0; 		
 unsigned int counter1 = 0; 
 
-unsigned int D1;
-unsigned int D2;
+unsigned char D1;
+unsigned char D2;
 
 
 //Function declarations
 void Init(void);
-void display(unsigned int Display1, unsigned int Display2);
+void display(unsigned char Display1, unsigned char Display2);
 
 void main (void)
 {	
@@ -147,7 +147,7 @@ void main (void)
 						
 					}
 
-					if (D1changed == 1 || D2changed == 1) {
+					if (D2changed == 1 || D2changed == 1) {
 						
 						display(D1, D2);
 						
@@ -158,14 +158,14 @@ void main (void)
 				// answer state
 				if (answerState == 1) {
 					
-					if (counter == (2*second) && D1changed == 0) {
+					if (counter == (2*second) && D2changed == 0) {
 							
 							display(D1, D2);
 							
 							counter = 0; // repeat the cycle
 							
 						
-					} else if (counter == second && D1changed == 0) {
+					} else if (counter == second && D2changed == 0) {
 						
 						if (pressA == 1) {
 							
@@ -385,7 +385,7 @@ void External1_ISR (void) interrupt 2 {
 	
 }
 
-void display(unsigned int Display1, unsigned int Display2)
+void display(unsigned char Display1, unsigned char Display2)
 {
 
 	P1 = Display1;

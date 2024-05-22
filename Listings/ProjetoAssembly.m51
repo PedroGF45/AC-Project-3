@@ -1,4 +1,4 @@
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    05/22/2024  00:59:00  PAGE 1
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                    05/22/2024  13:09:03  PAGE 1
 
 
 BL51 BANKED LINKER/LOCATER V6.22.4.0, INVOKED BY:
@@ -39,7 +39,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   ----------------------------------
 
   -------         MODULE        PROJETOASSEMBLY
-  N:0011H         SYMBOL        ALETTER
+  N:0088H         SYMBOL        ALETTER
   C:12A8H         SYMBOL        ANSWERB
   C:12B7H         SYMBOL        ANSWERC
   C:12C6H         SYMBOL        ANSWERD
@@ -49,17 +49,17 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   B:00B0H.5       SYMBOL        BB
   B:00B0H.6       SYMBOL        BC
   B:00B0H.7       SYMBOL        BD
-  N:00C1H         SYMBOL        BLETTER
+  N:0083H         SYMBOL        BLETTER
   C:113AH         SYMBOL        CHECKANSWERSTATE
   C:1079H         SYMBOL        CHECKANSWERSTATE1
   C:116DH         SYMBOL        CHECKB
   C:1186H         SYMBOL        CHECKC
   C:119FH         SYMBOL        CHECKD
   C:11B8H         SYMBOL        CHECKNONE
-  N:0063H         SYMBOL        CLETTER
+  N:00C6H         SYMBOL        CLETTER
   C:11F8H         SYMBOL        CONFIGUREINTERRUPTIONS
   N:0000H         SYMBOL        COUNTER
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  00:59:00  PAGE 2
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  13:09:03  PAGE 2
 
 
   N:0000H         SYMBOL        COUNTER1
@@ -68,8 +68,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   N:0000H         SYMBOL        D2
   N:0000H         SYMBOL        D2CHANGED
   C:1215H         SYMBOL        DISPLAY
-  N:0085H         SYMBOL        DLETTER
-  N:0001H         SYMBOL        EIGHT
+  N:00A1H         SYMBOL        DLETTER
+  N:0080H         SYMBOL        EIGHT
   N:0010H         SYMBOL        EIGHTTENTHSECONDS
   C:1113H         SYMBOL        EIGHTTENTHSECONDSR
   C:11F1H         SYMBOL        ENABLEINTERRUPTIONS
@@ -79,33 +79,33 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   C:1263H         SYMBOL        EXTERNALINTERRUPTION0END
   C:128FH         SYMBOL        EXTERNALINTERRUPTION1
   C:12D5H         SYMBOL        EXTERNALINTERRUPTION1END
-  N:0049H         SYMBOL        FIVE
-  N:0048H         SYMBOL        FIVEDOT
+  N:0092H         SYMBOL        FIVE
+  N:0012H         SYMBOL        FIVEDOT
   N:0064H         SYMBOL        FIVESECONDS
   N:000AH         SYMBOL        FIVETENTHSECONDS
   C:10DAH         SYMBOL        FIVETENTHSECONDSR
   C:1013H         SYMBOL        FOR
   N:0099H         SYMBOL        FOUR
-  N:0098H         SYMBOL        FOURDOT
+  N:0019H         SYMBOL        FOURDOT
   N:0050H         SYMBOL        FOURSECONDS
   C:1064H         SYMBOL        FOURSECONDSR
   N:0008H         SYMBOL        FOURTENTHSECONDS
   C:10C7H         SYMBOL        FOURTENTHSECONDSR
-  N:00FDH         SYMBOL        HIFEN
-  N:00FCH         SYMBOL        HIFENDOT
+  N:00BFH         SYMBOL        HIFEN
+  N:003FH         SYMBOL        HIFENDOT
   D:00A8H         SYMBOL        IE
   C:11D2H         SYMBOL        INITIALIZATIONS
   D:00B8H         SYMBOL        IP
   B:0088H.0       SYMBOL        IT0
   B:0088H.2       SYMBOL        IT1
   C:1000H         SYMBOL        MAIN
-  N:0009H         SYMBOL        NINE
+  N:0090H         SYMBOL        NINE
   N:0012H         SYMBOL        NINETENTHSECONDS
   C:1125H         SYMBOL        NINETENTHSECONDSR
   C:1242H         SYMBOL        NOTWAITING
   N:00FFH         SYMBOL        NULL
-  N:009FH         SYMBOL        ONE
-  N:009EH         SYMBOL        ONEDOT
+  N:00F9H         SYMBOL        ONE
+  N:0079H         SYMBOL        ONEDOT
   C:114CH         SYMBOL        ONESECONDANSWER
   C:102CH         SYMBOL        ONESECONDR
   C:108EH         SYMBOL        ONETENTHSECONDSR
@@ -118,13 +118,13 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   N:0000H         SYMBOL        PRESSD
   D:00D0H         SYMBOL        PSW
   N:0014H         SYMBOL        SECOND
-  N:001FH         SYMBOL        SEVEN
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  00:59:00  PAGE 3
+  N:00F8H         SYMBOL        SEVEN
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  13:09:03  PAGE 3
 
 
   N:000EH         SYMBOL        SEVENTENTHSECONDS
   C:1100H         SYMBOL        SEVENTENTHSECONDSR
-  N:0041H         SYMBOL        SIX
+  N:0082H         SYMBOL        SIX
   N:000CH         SYMBOL        SIXTENTHSECONDS
   C:10EDH         SYMBOL        SIXTENTHSECONDSR
   D:0081H         SYMBOL        SP
@@ -132,8 +132,8 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   N:0002H         SYMBOL        TENTHSECOND
   D:008CH         SYMBOL        TH0
   D:008DH         SYMBOL        TH1
-  N:000DH         SYMBOL        THREE
-  N:000CH         SYMBOL        THREEDOT
+  N:00B0H         SYMBOL        THREE
+  N:0030H         SYMBOL        THREEDOT
   N:003CH         SYMBOL        THREESECONDS
   C:1052H         SYMBOL        THREESECONDSR
   N:0006H         SYMBOL        THREETENTHSECONDS
@@ -150,15 +150,15 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   D:0089H         SYMBOL        TMOD
   B:0088H.4       SYMBOL        TR0
   B:0088H.6       SYMBOL        TR1
-  N:0025H         SYMBOL        TWO
+  N:00A4H         SYMBOL        TWO
   N:0024H         SYMBOL        TWODOT
   N:0028H         SYMBOL        TWOSECONDS
   C:103FH         SYMBOL        TWOSECONDSR
   N:0004H         SYMBOL        TWOTENTHSECONDS
   C:10A1H         SYMBOL        TWOTENTHSECONDSR
   N:0001H         SYMBOL        WAITINGSTATE
-  N:0003H         SYMBOL        ZERO
-  N:0002H         SYMBOL        ZERODOT
+  N:00C0H         SYMBOL        ZERO
+  N:0040H         SYMBOL        ZERODOT
   C:107BH         SYMBOL        ZEROTENTHSECONDSR
   C:0000H         LINE#         70
   C:0003H         LINE#         73
@@ -179,7 +179,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   C:1019H         LINE#         110
   C:101CH         LINE#         111
   C:101DH         LINE#         112
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  00:59:00  PAGE 4
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  13:09:03  PAGE 4
 
 
   C:1020H         LINE#         115
@@ -239,7 +239,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   C:1095H         LINE#         231
   C:1097H         LINE#         234
   C:1099H         LINE#         238
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  00:59:00  PAGE 5
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  13:09:03  PAGE 5
 
 
   C:109BH         LINE#         240
@@ -299,7 +299,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   C:110DH         LINE#         354
   C:110FH         LINE#         355
   C:1111H         LINE#         356
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  00:59:00  PAGE 6
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  13:09:03  PAGE 6
 
 
   C:1113H         LINE#         359
@@ -359,7 +359,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   C:1186H         LINE#         471
   C:1189H         LINE#         474
   C:118BH         LINE#         476
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  00:59:00  PAGE 7
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  13:09:03  PAGE 7
 
 
   C:118CH         LINE#         477
@@ -419,7 +419,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   C:11F4H         LINE#         575
   C:11F7H         LINE#         576
   C:11F8H         LINE#         581
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  00:59:00  PAGE 8
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  13:09:03  PAGE 8
 
 
   C:11FAH         LINE#         582
@@ -479,7 +479,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   C:1270H         LINE#         698
   C:1271H         LINE#         700
   C:1273H         LINE#         702
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  00:59:00  PAGE 9
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  13:09:03  PAGE 9
 
 
   C:1276H         LINE#         704
@@ -539,7 +539,7 @@ SYMBOL TABLE OF MODULE:  .\Objects\ProjetoAssembly (PROJETOASSEMBLY)
   C:12EAH         LINE#         840
   C:12ECH         LINE#         841
   -------         ENDMOD        PROJETOASSEMBLY
-BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  00:59:00  PAGE 10
+BL51 BANKED LINKER/LOCATER V6.22.4.0                                                  05/22/2024  13:09:03  PAGE 10
 
 
 
