@@ -1,0 +1,1023 @@
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     1
+
+
+MACRO ASSEMBLER A51 V8.2.7.0
+OBJECT MODULE PLACED IN .\Objects\projetoAssembly.obj
+ASSEMBLER INVOKED BY: F:\Keil_v5\C51\BIN\A51.EXE projetoAssembly.a51 SET(SMALL) DEBUG PRINT(.\Listings\projetoAssembly.l
+                      st) OBJECT(.\Objects\projetoAssembly.obj) EP
+
+LOC  OBJ            LINE     SOURCE
+
+  0002                 1     tenthSecond             EQU             2               ;time to count 0,1 seconds (2 x 50m
+                             s)
+  0004                 2     twoTenthSeconds EQU             4
+  0006                 3     threeTenthSeconds EQU   6
+  0008                 4     fourTenthSeconds        EQU 8
+  000A                 5     fiveTenthSeconds EQU    10
+  000C                 6     sixTenthSeconds EQU             12
+  000E                 7     sevenTenthSeconds EQU   14
+  0010                 8     eightTenthSeconds EQU   16
+  0012                 9     nineTenthSeconds EQU    18
+  0014                10     second                  EQU             20              ;time to count 1 second (20 x 50ms)
+  0028                11     twoSeconds              EQU     40              
+  003C                12     threeSeconds    EQU             60
+  0050                13     fourSeconds     EQU     80
+  0064                14     fiveSeconds     EQU     100
+  003C                15     THtimer                 EQU     0x3C    ;Timer 0 - 50ms -> (65536(10000h) - 50000(3E8h) = 1
+                             5536(3CB0h))
+  00B0                16     TLtimer                 EQU     0xB0    ;Timer 0 - 50ms -> (65536(10000h) - 50000(3E8h) = 1
+                             5536(3CB0h))
+                      17     
+                      18     ; values for display
+  00FF                19     null                    EQU             0xFF    
+  0002                20     zeroDot                 EQU             0x02    
+  009E                21     oneDot                  EQU             0x9E    
+  0024                22     twoDot                  EQU             0x24    
+  000C                23     threeDot                EQU             0x0C    
+  0098                24     fourDot                 EQU             0x98
+  0048                25     fiveDot                 EQU     0x48    
+  00FC                26     hifenDot                EQU             0xFC
+  0003                27     zero                    EQU             0x03    
+  009F                28     one                             EQU             0x9F    
+  0025                29     two                             EQU             0x25    
+  000D                30     three                   EQU             0x0D    
+  0099                31     four                    EQU             0x99    
+  0049                32     five                    EQU             0x49    
+  0041                33     six                             EQU             0x41    
+  001F                34     seven                   EQU             0x1F    
+  0001                35     eight                   EQU             0x01    
+  0009                36     nine                    EQU             0x09  
+  00FD                37     hifen                   EQU             0xFD    
+  0011                38     aLetter                 EQU             0x11    
+  00C1                39     bLetter                 EQU             0xC1    
+  0063                40     cLetter                 EQU             0x63    
+  0085                41     dLetter                 EQU             0x85    
+                      42     
+                      43     
+                      44     ; Buttons definition
+  00B4                45     BA                      EQU     P3^4    ;
+  00B5                46     BB                              EQU     P3^5    ;
+  00B6                47     BC                              EQU     P3^6    ;
+  00B7                48     BD                              EQU     P3^7    ;
+                      49             
+                      50     ; states
+  0001                51     waitingState    EQU     1               ; R0 bank 0
+  0000                52     timeState               EQU     0               ; R1 bank 0
+  0000                53     answerState     EQU     0               ; R2 bank 0
+  0000                54     D1changed               EQU     0               ; R3 bank 0
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     2
+
+  0000                55     D2changed               EQU     0               ; R4 bank 0
+                      56     
+  0000                57     counter                 EQU     0               ; R5 bank 0
+  0000                58     counter1                EQU     0               ; R6 bank 0
+                      59     
+  0000                60     D1                              EQU     0               ; R0 bank 1
+  0000                61     D2                              EQU     0               ; R1 bank 1
+  0000                62     pressA                  EQU     0               ; R2 bank 1
+  0000                63     pressB                  EQU     0               ; R3 bank 1
+  0000                64     pressC                  EQU     0               ; R4 bank 1
+  0000                65     pressD                  EQU     0               ; R5 bank 1
+                      66             
+  000F                67     StackPointer    EQU     0x0F    ; need to point to a new location because of the usage of 2
+                              banks
+                      68             
+----                  69     CSEG AT 0000H
+0000 021000           70             JMP Main
+                      71     
+----                  72     CSEG AT 0003H
+0003 02121E           73             JMP ExternalInterruption0
+                      74             
+----                  75     CSEG AT 000BH
+000B 021266           76             JMP TimerInterruption0
+                      77             
+----                  78     CSEG AT 0013H
+0013 02128F           79             JMP ExternalInterruption1
+                      80             
+----                  81     CSEG AT 001BH
+001B 0212D8           82             JMP TimerInterruption1
+                      83             
+----                  84     CSEG AT 1000H
+                      85             
+1000                  86     Main:
+                      87     
+1000 75810F           88             MOV SP, #StackPointer
+1003 31D2             89             CALL Initializations            ; routine to set registers
+1005 31F1             90             CALL EnableInterruptions        ; routine to enable interruptions and set priorities
+1007 31F8             91             CALL ConfigureInterruptions ; routine to configure tmod, timers and tcon
+                      92             
+                      93             ; select bank 1
+1009 D2D3             94             SETB PSW.3                                      
+                      95             
+100B 7848             96             MOV R0, #fiveDot
+100D 7903             97             MOV R1, #zero
+                      98             
+                      99             ; select bank 0                                 
+100F C2D3            100             CLR PSW.3
+                     101             
+1011 5115            102             CALL Display
+                     103             
+1013                 104             For:
+                     105             
+1013 B80063          106             CJNE R0, #0, CheckAnswerState1; waitingState == 0
+                     107             
+1016 B90160          108             CJNE R1, #1, CheckAnswerState1; timeState == 1
+                     109             
+1019 BB0010          110             CJNE R3, #0, OneSecondR; D1Changed == 0
+101C ED              111             MOV A, R5                                                               ; A = count
+                             er
+101D B4500C          112             CJNE A, #fourSeconds, OneSecondR                ; counter == 4 * seconds
+                     113                     
+                     114                     ; select bank 1
+1020 D2D3            115                     SETB PSW.3                                      
+                     116                      
+                     117                     
+1022 7802            118                     MOV R0, #zeroDot
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     3
+
+                     119                     
+                     120                     ; select bank 0
+                     121                                                             
+1024 C2D3            122                     CLR PSW.3
+                     123                     
+1026 7B01            124                     MOV R3, #1
+1028 5115            125                     CALL Display
+102A 804F            126                     JMP ZeroTenthSecondsR
+                     127                     
+102C                 128             OneSecondR:
+102C BB0010          129             CJNE R3, #0, TwoSecondsR; D1Changed == 0
+102F ED              130             MOV A, R5                                                               ; A = count
+                             er
+1030 B43C0C          131             CJNE A, #threeSeconds, TwoSecondsR              ; counter == 3 * seconds
+                     132             
+                     133                     ; select bank 1
+1033 D2D3            134                     SETB PSW.3                                      
+                     135                      
+                     136                     
+1035 789E            137                     MOV R0, #oneDot
+                     138                     
+                     139                     ; select bank 0
+                     140                                                             
+1037 C2D3            141                     CLR PSW.3
+                     142                     
+1039 7B01            143                     MOV R3, #1
+103B 5115            144                     CALL Display
+103D 803C            145                     JMP ZeroTenthSecondsR
+                     146                     
+103F                 147             TwoSecondsR:
+103F BB0010          148             CJNE R3, #0, ThreeSecondsR; D1Changed == 0
+1042 ED              149             MOV A, R5                                                               ; A = count
+                             er
+1043 B4280C          150             CJNE A, #twoSeconds, ThreeSecondsR              ; counter == 2 * seconds
+                     151             
+                     152                     ; select bank 1
+1046 D2D3            153                     SETB PSW.3                                      
+                     154                      
+                     155                     
+1048 7824            156                     MOV R0, #twoDot
+                     157                     
+                     158                     ; select bank 0
+                     159                                                             
+104A C2D3            160                     CLR PSW.3
+                     161                     
+104C 7B01            162                     MOV R3, #1
+104E 5115            163                     CALL Display
+1050 8029            164                     JMP ZeroTenthSecondsR
+                     165             
+1052                 166             ThreeSecondsR:
+1052 BB000F          167             CJNE R3, #0, FourSecondsR; D1Changed == 0
+1055 BD140C          168             CJNE R5, #second, FourSecondsR ; counter == second
+                     169             
+                     170                     ; select bank 1
+1058 D2D3            171                     SETB PSW.3                                      
+                     172                      
+                     173                     
+105A 780C            174                     MOV R0, #threeDot
+                     175                     
+                     176                     ; select bank 0
+                     177                                                             
+105C C2D3            178                     CLR PSW.3
+                     179                     
+105E 7B01            180                     MOV R3, #1 ; D1changed = 1
+1060 5115            181                     CALL Display
+1062 8017            182                     JMP ZeroTenthSecondsR
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     4
+
+                     183                     
+1064                 184             FourSecondsR:
+1064 BB0014          185             CJNE R3, #0, ZeroTenthSecondsR  ; D1Changed == 0
+1067 B90111          186             CJNE R1, #1, ZeroTenthSecondsR  ; timeState == 1 
+106A BD000E          187             CJNE R5, #0, ZeroTenthSecondsR  ; counter == 0
+                     188             
+                     189                     ; select bank 1
+106D D2D3            190                     SETB PSW.3                                      
+                     191                      
+                     192                     
+106F 7898            193                     MOV R0, #fourDot
+                     194                     
+                     195                     ; select bank 0
+                     196                                                             
+1071 C2D3            197                     CLR PSW.3
+                     198                     
+1073 7B01            199                     MOV R3, #1
+1075 5115            200                     CALL Display
+1077 8002            201                     JMP ZeroTenthSecondsR
+                     202                     
+1079                 203             CheckAnswerState1:
+1079 213A            204                     JMP CheckAnswerState
+                     205                     
+107B                 206             ZeroTenthSecondsR:
+107B BC0010          207                     CJNE R4, #0, OneTenthSecondsR; D2Changed == 0
+107E EE              208                     MOV A, R6
+107F B4120C          209                     CJNE A, #nineTenthSeconds, OneTenthSecondsR ; counter1 == 9 * tenthSeconds
+                     210                     
+                     211                     ; select bank 1
+1082 D2D3            212                     SETB PSW.3                                      
+                     213                      
+                     214                     
+1084 7903            215                     MOV R1, #zero
+                     216                     
+                     217                     ; select bank 0
+                     218                                                             
+1086 C2D3            219                     CLR PSW.3
+                     220                     
+1088 7C01            221                     MOV R4, #1
+108A 5115            222                     CALL Display
+108C 213A            223                     JMP CheckAnswerState
+                     224                     
+108E                 225             OneTenthSecondsR:
+108E BC0010          226                     CJNE R4, #0, TwoTenthSecondsR; D2Changed == 0
+1091 EE              227                     MOV A, R6
+1092 B4100C          228                     CJNE A, #eightTenthSeconds, TwoTenthSecondsR ; counter1 == 8 * tenthSeconds
+                     229             
+                     230                     ; select bank 1
+1095 D2D3            231                     SETB PSW.3                                      
+                     232                      
+                     233                     
+1097 799F            234                     MOV R1, #one
+                     235                     
+                     236                     ; select bank 0
+                     237                                                             
+1099 C2D3            238                     CLR PSW.3
+                     239                     
+109B 7C01            240                     MOV R4, #1
+109D 5115            241                     CALL Display
+109F 213A            242                     JMP CheckAnswerState
+                     243                     
+10A1                 244             TwoTenthSecondsR:
+10A1 BC0010          245                     CJNE R4, #0, ThreeTenthSecondsR; D2Changed == 0
+10A4 EE              246                     MOV A, R6
+10A5 B40E0C          247                     CJNE A, #sevenTenthSeconds, ThreeTenthSecondsR ; counter1 == 7 * tenthSecon
+                             ds
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     5
+
+                     248             
+                     249                     ; select bank 1
+10A8 D2D3            250                     SETB PSW.3                                      
+                     251                      
+                     252                     
+10AA 7925            253                     MOV R1, #two
+                     254                     
+                     255                     ; select bank 0
+                     256                                                             
+10AC C2D3            257                     CLR PSW.3
+                     258                     
+10AE 7C01            259                     MOV R4, #1
+10B0 5115            260                     CALL Display
+10B2 213A            261                     JMP CheckAnswerState
+                     262                     
+10B4                 263             ThreeTenthSecondsR:
+10B4 BC0010          264                     CJNE R4, #0, FourTenthSecondsR; D2Changed == 0
+10B7 EE              265                     MOV A, R6
+10B8 B40C0C          266                     CJNE A, #sixTenthSeconds, FourTenthSecondsR ; counter1 == 6 * tenthSeconds
+                     267             
+                     268                     ; select bank 1
+10BB D2D3            269                     SETB PSW.3                                      
+                     270                      
+                     271                     
+10BD 790D            272                     MOV R1, #three
+                     273                     
+                     274                     ; select bank 0
+                     275                                                             
+10BF C2D3            276                     CLR PSW.3
+                     277                     
+10C1 7C01            278                     MOV R4, #1
+10C3 5115            279                     CALL Display
+10C5 8073            280                     JMP CheckAnswerState
+                     281             
+10C7                 282             FourTenthSecondsR:
+10C7 BC0010          283                     CJNE R4, #0, FiveTenthSecondsR; D2Changed == 0
+10CA EE              284                     MOV A, R6
+10CB B40A0C          285                     CJNE A, #fiveTenthSeconds, FiveTenthSecondsR ; counter1 == 5 * tenthSeconds
+                     286             
+                     287                     ; select bank 1
+10CE D2D3            288                     SETB PSW.3                                      
+                     289                      
+                     290                     
+10D0 7999            291                     MOV R1, #four
+                     292                     
+                     293                     ; select bank 0
+                     294                                                             
+10D2 C2D3            295                     CLR PSW.3
+                     296                     
+10D4 7C01            297                     MOV R4, #1
+10D6 5115            298                     CALL Display
+10D8 8060            299                     JMP CheckAnswerState
+                     300                     
+10DA                 301             FiveTenthSecondsR:
+10DA BC0010          302                     CJNE R4, #0, SixTenthSecondsR; D2Changed == 0
+10DD EE              303                     MOV A, R6
+10DE B4080C          304                     CJNE A, #fourTenthSeconds, SixTenthSecondsR ; counter1 == 4 * tenthSeconds
+                     305             
+                     306                     ; select bank 1
+10E1 D2D3            307                     SETB PSW.3                                      
+                     308                      
+                     309                     
+10E3 7949            310                     MOV R1, #five
+                     311                     
+                     312                     ; select bank 0
+                     313                                                             
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     6
+
+10E5 C2D3            314                     CLR PSW.3
+                     315                     
+10E7 7C01            316                     MOV R4, #1
+10E9 5115            317                     CALL Display
+10EB 804D            318                     JMP CheckAnswerState
+                     319                     
+10ED                 320             SixTenthSecondsR:
+10ED BC0010          321                     CJNE R4, #0, SevenTenthSecondsR; D2Changed == 0
+10F0 EE              322                     MOV A, R6
+10F1 B4060C          323                     CJNE A, #threeTenthSeconds, SevenTenthSecondsR ; counter1 == 3 * tenthSecon
+                             ds
+                     324             
+                     325                     ; select bank 1
+10F4 D2D3            326                     SETB PSW.3                                      
+                     327                      
+                     328                     
+10F6 7941            329                     MOV R1, #six
+                     330                     
+                     331                     ; select bank 0
+                     332                                                             
+10F8 C2D3            333                     CLR PSW.3
+                     334                     
+10FA 7C01            335                     MOV R4, #1
+10FC 5115            336                     CALL Display
+10FE 803A            337                     JMP CheckAnswerState
+                     338                     
+1100                 339             SevenTenthSecondsR:
+1100 BC0010          340                     CJNE R4, #0, EightTenthSecondsR; D2Changed == 0
+1103 EE              341                     MOV A, R6
+1104 B4040C          342                     CJNE A, #twoTenthSeconds, EightTenthSecondsR ; counter1 == 2 * tenthSeconds
+                     343             
+                     344                     ; select bank 1
+1107 D2D3            345                     SETB PSW.3                                      
+                     346                      
+                     347                     
+1109 791F            348                     MOV R1, #seven
+                     349                     
+                     350                     ; select bank 0
+                     351                                                             
+110B C2D3            352                     CLR PSW.3
+                     353                     
+110D 7C01            354                     MOV R4, #1
+110F 5115            355                     CALL Display
+1111 8027            356                     JMP CheckAnswerState
+                     357                     
+1113                 358             EightTenthSecondsR:
+1113 BC000F          359                     CJNE R4, #0, NineTenthSecondsR; D2Changed == 0
+1116 BE020C          360                     CJNE R6, #tenthSecond, NineTenthSecondsR ; counter == tenthSeconds
+                     361             
+                     362                     ; select bank 1
+1119 D2D3            363                     SETB PSW.3                                      
+                     364                      
+                     365                     
+111B 7901            366                     MOV R1, #eight
+                     367                     
+                     368                     ; select bank 0
+                     369                                                             
+111D C2D3            370                     CLR PSW.3
+                     371                     
+111F 7C01            372                     MOV R4, #1
+1121 5115            373                     CALL Display
+1123 8015            374                     JMP CheckAnswerState
+                     375                     
+1125                 376             NineTenthSecondsR:
+                     377             
+1125 BC0012          378                     CJNE R4, #0, CheckAnswerState; D2Changed == 0
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     7
+
+1128 BE000F          379                     CJNE R6, #0, CheckAnswerState ; counter == 0
+112B B9010C          380                     CJNE R1, #1, CheckAnswerState ; timeState == 1
+                     381             
+                     382                     ; select bank 1
+112E D2D3            383                     SETB PSW.3                                      
+                     384                      
+                     385                     
+1130 7909            386                     MOV R1, #nine
+                     387                     
+                     388                     ; select bank 0
+                     389                                                             
+1132 C2D3            390                     CLR PSW.3
+                     391                     
+1134 7C01            392                     MOV R4, #1  ; D2changed = 1
+1136 5115            393                     CALL Display
+1138 8000            394                     JMP CheckAnswerState
+                     395                     
+                     396                     
+113A                 397             CheckAnswerState:
+                     398                     
+113A BA010D          399                     CJNE R2, #1, EndCycle1  ; answerState == 1
+                     400                     
+113D BB000C          401                     CJNE R3, #0, OneSecondAnswer; D1Changed == 0
+1140 ED              402                     MOV A, R5
+1141 B42808          403                     CJNE A, #twoSeconds, OneSecondAnswer ; counter == 2 * seconds
+                     404             
+1144 5115            405                     CALL Display
+1146 7D00            406                     MOV R5, #0                              ; reset counter
+                     407                     
+1148 21CE            408                     JMP EndCycle
+                     409                     
+114A                 410                     EndCycle1:
+114A 21CE            411                             JMP EndCycle
+                     412                     
+114C                 413                     OneSecondAnswer:
+                     414                     
+114C BB007F          415                             CJNE R3, #0, EndCycle; D1Changed == 0
+114F BD147C          416                             CJNE R5, #second, EndCycle ; counter == second
+                     417     
+                     418                             ; select bank 1
+1152 D2D3            419                             SETB PSW.3
+                     420                             
+1154 BA0116          421                             CJNE R2, #1, CheckB     ; pressA == 1
+                     422     
+                     423                             ; select bank 1
+1157 D2D3            424                             SETB PSW.3
+                     425                             
+1159 E8              426                             MOV A, R0
+115A 78FC            427                             MOV R0, #hifenDot
+115C 89F0            428                             MOV B, R1
+115E 7911            429                             MOV R1, #aLetter
+                     430                             
+1160 C2D3            431                             CLR PSW.3
+1162 5115            432                             CALL Display
+                     433                             
+                     434                             ; select bank 1
+1164 D2D3            435                             SETB PSW.3
+                     436                             
+1166 F8              437                             MOV R0, A
+1167 A9F0            438                             MOV R1, B
+                     439                             
+                     440                             ; select bank 0                                 
+1169 C2D3            441                             CLR PSW.3
+116B 8061            442                             JMP EndCycle
+                     443                             
+116D                 444                     CheckB:
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     8
+
+                     445                             
+116D BB0116          446                             CJNE R3, #1, CheckC     ; pressB == 1
+                     447     
+                     448                             ; select bank 1
+1170 D2D3            449                             SETB PSW.3
+                     450                             
+1172 E8              451                             MOV A, R0
+1173 78FC            452                             MOV R0, #hifenDot
+1175 89F0            453                             MOV B, R1
+1177 79C1            454                             MOV R1, #bLetter
+                     455                             
+1179 C2D3            456                             CLR PSW.3
+117B 5115            457                             CALL Display
+                     458                             
+                     459                             ; select bank 1
+117D D2D3            460                             SETB PSW.3
+                     461                             
+117F F8              462                             MOV R0, A
+1180 A9F0            463                             MOV R1, B
+                     464                             
+                     465                             ; select bank 0                                 
+1182 C2D3            466                             CLR PSW.3
+1184 8048            467                             JMP EndCycle
+                     468                             
+1186                 469                     CheckC:
+                     470                     
+1186 BC0116          471                             CJNE R4, #1, CheckD     ; pressC == 1
+                     472                     
+                     473                             ; select bank 1
+1189 D2D3            474                             SETB PSW.3
+                     475                             
+118B E8              476                             MOV A, R0
+118C 78FC            477                             MOV R0, #hifenDot
+118E 89F0            478                             MOV B, R1
+1190 7963            479                             MOV R1, #cLetter
+                     480                             
+1192 C2D3            481                             CLR PSW.3
+1194 5115            482                             CALL Display
+                     483                             
+                     484                             ; select bank 1
+1196 D2D3            485                             SETB PSW.3
+                     486                             
+1198 F8              487                             MOV R0, A
+1199 A9F0            488                             MOV R1, B
+                     489                             
+                     490                             ; select bank 0                                 
+119B C2D3            491                             CLR PSW.3
+119D 802F            492                             JMP EndCycle
+                     493                             
+119F                 494                     CheckD:
+                     495                     
+119F BD0116          496                             CJNE R5, #1, CheckNone  ; pressD == 1
+                     497                             
+                     498                             ; select bank 1
+11A2 D2D3            499                             SETB PSW.3
+                     500                             
+11A4 E8              501                             MOV A, R0
+11A5 78FC            502                             MOV R0, #hifenDot
+11A7 89F0            503                             MOV B, R1
+11A9 7985            504                             MOV R1, #dLetter
+                     505                             
+11AB C2D3            506                             CLR PSW.3
+11AD 5115            507                             CALL Display
+                     508                             
+                     509                             ; select bank 1
+11AF D2D3            510                             SETB PSW.3
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE     9
+
+                     511                             
+11B1 F8              512                             MOV R0, A
+11B2 A9F0            513                             MOV R1, B
+                     514                             
+                     515                             ; select bank 0                                 
+11B4 C2D3            516                             CLR PSW.3
+11B6 8016            517                             JMP EndCycle
+                     518                     
+11B8                 519                     CheckNone:
+                     520                             
+                     521                             ; select bank 1
+11B8 D2D3            522                             SETB PSW.3
+                     523                             
+11BA E8              524                             MOV A, R0
+11BB 78FC            525                             MOV R0, #hifenDot
+11BD 89F0            526                             MOV B, R1
+11BF 79FD            527                             MOV R1, #hifen
+                     528                             
+11C1 C2D3            529                             CLR PSW.3
+11C3 5115            530                             CALL Display
+                     531                             
+                     532                             ; select bank 1
+11C5 D2D3            533                             SETB PSW.3
+                     534                             
+11C7 F8              535                             MOV R0, A
+11C8 A9F0            536                             MOV R1, B
+                     537                             
+                     538                             ; select bank 0                                 
+11CA C2D3            539                             CLR PSW.3
+11CC 8000            540                             JMP EndCycle
+                     541     
+11CE                 542             EndCycle:
+11CE C2D3            543                     CLR PSW.3
+11D0 0113            544                     JMP For                         ; begin again
+                     545                             
+11D2                 546     Initializations:
+                     547     
+11D2 7801            548             MOV R0, #waitingState
+11D4 7900            549             MOV R1, #timeState
+11D6 7A00            550             MOV R2, #answerState
+11D8 7B00            551             MOV R3, #D1changed
+11DA 7C00            552             MOV R4, #D2changed
+11DC 7D00            553             MOV R5, #counter
+11DE 7E00            554             MOV R6, #counter1
+                     555     
+                     556             ; select bank 1
+11E0 D2D3            557             SETB PSW.3                                      
+                     558                                                     
+                     559             
+11E2 7800            560             MOV R0, #D1
+11E4 7900            561             MOV R1, #D2
+11E6 7A00            562             MOV R2, #pressA
+11E8 7B00            563             MOV R3, #pressB
+11EA 7C00            564             MOV R4, #pressC
+11EC 7D00            565             MOV R5, #pressD
+                     566             
+                     567             ; select bank 0
+11EE C2D3            568             CLR PSW.3                                       
+                     569             
+                     570             
+11F0 22              571             RET
+                     572     
+11F1                 573     EnableInterruptions:
+11F1 75A88F          574             MOV IE, #8FH                            ; EA=1, ET1=1, EX1=1, ET0=1 e EX0=1 -> IE=1
+                             0001111
+11F4 75B800          575             MOV IP, #00H                            ; Don't change priorities
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    10
+
+11F7 22              576             RET
+                     577             
+11F8                 578     ConfigureInterruptions:
+                     579     
+                     580             ; TMOD Config
+11F8 E589            581             MOV A, TMOD                                     ; copy tmod to A
+11FA 5400            582             ANL A,#0x00                                     ; set all bits of tmod to 0
+11FC 4411            583             ORL A,#0x11                                     ; set timer mods to 1 (16 bits)
+11FE F589            584             MOV TMOD, A                                     ; set tmod
+                     585             
+                     586             ; timer 0 config
+1200 758C3C          587             MOV TH0, #THtimer                       ; set th0
+1203 758A3C          588             MOV TL0, #THtimer                       ; set tl0 
+                     589             
+                     590             ; timer 1 config
+1206 758D3C          591             MOV TH1, #THtimer                       ; set th1
+1209 758B3C          592             MOV TL1, #THtimer                       ; set tl1
+                     593     
+                     594             ; TCON config
+120C C28C            595             CLR TR0                                         ; timer 0 is turned off
+120E C28E            596             CLR TR1                                         ; timer 1 is turned off
+1210 D288            597             SETB IT0                                        ; external interruption 0 is activa
+                             ted on falling edge
+1212 D28A            598             SETB IT1                                        ; external interruption 1 is activa
+                             ted on falling edge
+                     599             
+1214 22              600             RET
+                     601     
+1215                 602     Display:
+                     603     
+                     604             ; select bank 1
+1215 D2D3            605             SETB PSW.3                                      
+                     606             
+                     607     
+1217 8890            608             MOV P1, R0
+1219 89A0            609             MOV P2, R1
+                     610             
+                     611             ; select bank 0
+                     612                                                     
+121B C2D3            613             CLR PSW.3
+                     614             
+121D 22              615             RET
+                     616     
+                     617     
+121E                 618     ExternalInterruption0:
+                     619     
+121E C0D0            620             PUSH PSW
+                     621             
+                     622             ; select bank 0                         
+1220 C2D3            623             CLR PSW.3
+                     624     
+1222 B8011D          625             CJNE R0, #1, NotWaiting         ; skip if the wainting state is 1
+                     626             
+1225 BA003B          627             CJNE R2, #0, ExternalInterruption0End; skip if answer state is 0
+                     628             
+                     629             ; change states
+1228 7800            630             MOV R0, #0                                      ; change to non waiting state
+122A 7901            631             MOV R1, #1                                      ; change to start counting time sta
+                             te
+                     632             
+                     633             ; enable timers
+122C D28C            634             SETB TR0
+122E D28E            635             SETB TR1
+                     636             
+                     637             ; Reload timers
+1230 758C3C          638             MOV TH0, #THtimer                       ; set th0
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    11
+
+1233 758A3C          639             MOV TL0, #THtimer                       ; set tl0 
+1236 758D3C          640             MOV TH1, #THtimer                       ; set th1
+1239 758B3C          641             MOV TL1, #THtimer                       ; set tl1
+                     642             
+                     643             ; reset counters
+123C 7D00            644             MOV R5, #0
+123E 7E00            645             MOV R6, #0
+                     646             
+1240 8021            647             JMP ExternalInterruption0End
+                     648             
+1242                 649             NotWaiting:
+                     650             
+1242 BA011E          651                     CJNE R2, #1, ExternalInterruption0End ; answerState == 1
+                     652             
+                     653                     ; change states
+1245 7801            654                     MOV R0, #1                              ; change to waiting state
+1247 7A00            655                     MOV R2, #0                              ; change to non answer state
+                     656                     
+                     657                     ; select bank 1
+1249 D2D3            658                     SETB PSW.3                                      
+                     659                     
+                     660                     
+124B 7A00            661                     MOV R2, #0          ; Reset button press flags
+124D 7B00            662                     MOV R3, #0
+124F 7C00            663                     MOV R4, #0
+1251 7D00            664                     MOV R5, #0
+                     665     
+1253 7848            666                     MOV R0, #fiveDot
+1255 7903            667                     MOV R1, #zero
+                     668                     
+                     669                     ; select bank 0
+                     670                                                             
+1257 C2D3            671                     CLR PSW.3
+                     672                     
+1259 5115            673                     CALL Display
+                     674                     
+                     675                     ; reset counters
+125B 7D00            676                     MOV R5, #0
+125D 7E00            677                     MOV R6, #0
+                     678                     
+                     679                     
+125F C28C            680                     CLR TR0
+1261 C28E            681                     CLR TR1
+                     682                     
+1263                 683             ExternalInterruption0End:
+1263 D0D0            684                     POP PSW
+1265 32              685                     RETI
+                     686                     
+1266                 687     TimerInterruption0:
+                     688     
+1266 C0D0            689             PUSH PSW
+                     690             
+                     691             ; select bank 0                         
+1268 C2D3            692             CLR PSW.3
+                     693             
+                     694             ; timer 0 config
+126A 758C3C          695             MOV TH0, #THtimer                       ; set th0
+126D 758A3C          696             MOV TL0, #THtimer                       ; set tl0       
+                     697             
+1270 0D              698             INC R5                                          ; Increment counter
+                     699             
+1271 7B00            700             MOV R3, #0                                      ; D1changed = 0
+                     701             
+1273 BD6416          702             CJNE R5, #fiveSeconds, TimerInterruption0End ; counter == 5*second
+                     703             
+1276 B80013          704             CJNE R0, #0, TimerInterruption0End ; waitingState == 0
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    12
+
+                     705             
+1279 B90110          706             CJNE R1, #1, TimerInterruption0End ; timeState == 1
+                     707             
+                     708             ; reset counter
+127C 7D00            709             MOV R5, #0                                      ; counter = 0
+                     710             
+                     711             ; change states
+127E 7900            712             MOV R1, #0                                      ; timeState = 0
+1280 7A01            713             MOV R2, #1                                      ; answerState = 1
+                     714             
+                     715             ; display
+                     716             ; select bank 1
+1282 D2D3            717             SETB PSW.3                                      
+                     718             
+                     719             
+1284 7802            720             MOV R0, #zeroDot
+1286 7903            721             MOV R1, #zero
+                     722             
+                     723             ; select bank 0
+                     724                                                     
+1288 C2D3            725             CLR PSW.3
+                     726             
+128A 5115            727             CALL Display
+                     728             
+128C                 729             TimerInterruption0End:
+128C D0D0            730                     POP PSW
+128E 32              731                     RETI
+                     732             
+128F                 733     ExternalInterruption1:
+                     734     
+128F C0D0            735             PUSH PSW
+                     736             
+                     737             ; select bank 0                         
+1291 C2D3            738             CLR PSW.3
+                     739     
+1293 B8003F          740             CJNE R0, #0, ExternalInterruption1End ; waitingState == 0
+                     741             
+1296 BA003C          742             CJNE R2, #0, ExternalInterruption1End ; answerState == 0
+                     743             
+1299 20B40C          744             JB BA, AnswerB                  ; BA == 0
+                     745             
+                     746             ; select bank 1
+129C D2D3            747             SETB PSW.3                                      
+                     748             
+                     749             
+129E 7A01            750             MOV R2, #1
+                     751             
+                     752             ; select bank 0
+                     753                                                     
+12A0 C2D3            754             CLR PSW.3
+                     755             
+                     756             ; change states
+12A2 7900            757             MOV R1, #0                                      ; timeState = 0
+12A4 7A01            758             MOV R2, #1                                      ; answerState = 1
+                     759             
+12A6 802D            760             JMP ExternalInterruption1End
+                     761             
+12A8                 762             AnswerB: 
+12A8 20B50C          763                     JB BB, AnswerC                  ; BB == 0
+                     764                     
+                     765                     ; select bank 1
+12AB D2D3            766                     SETB PSW.3                                      
+                     767                     
+                     768                     
+12AD 7B01            769                     MOV R3, #1
+                     770                     
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    13
+
+                     771                     ; select bank 0
+                     772                                                             
+12AF C2D3            773                     CLR PSW.3
+                     774                     
+                     775                     ; change states
+12B1 7900            776                     MOV R1, #0                                      ; timeState = 0
+12B3 7A01            777                     MOV R2, #1                                      ; answerState = 1
+                     778                     
+12B5 801E            779                     JMP ExternalInterruption1End
+                     780             
+12B7                 781             AnswerC:
+12B7 20B60C          782                     JB BC, AnswerD                  ; BC == 0
+                     783                     
+                     784                     ; select bank 1
+12BA D2D3            785                     SETB PSW.3                                      
+                     786                     
+                     787                     
+12BC 7C01            788                     MOV R4, #1
+                     789                     
+                     790                     ; select bank 0                         
+12BE C2D3            791                     CLR PSW.3
+                     792                     
+                     793                     ; change states
+12C0 7900            794                     MOV R1, #0                                      ; timeState = 0
+12C2 7A01            795                     MOV R2, #1                                      ; answerState = 1
+                     796                     
+12C4 800F            797                     JMP ExternalInterruption1End
+12C6                 798             AnswerD:
+12C6 20B70C          799                     JB BD, ExternalInterruption1End; BD == 0
+                     800     
+                     801                     ; select bank 1
+12C9 D2D3            802                     SETB PSW.3                                      
+                     803                     
+                     804     
+12CB 7D01            805                     MOV R5, #1
+                     806     
+                     807                     ; select bank 0                                 
+12CD C2D3            808                     CLR PSW.3
+                     809     
+                     810                     ; change states
+12CF 7900            811                     MOV R1, #0                                      ; timeState = 0
+12D1 7A01            812                     MOV R2, #1                                      ; answerState = 1
+                     813                     
+12D3 8000            814                     JMP ExternalInterruption1End
+                     815                     
+12D5                 816             ExternalInterruption1End:
+12D5 D0D0            817                     POP PSW
+12D7 32              818                     RETI
+                     819     
+12D8                 820     TimerInterruption1:
+                     821     
+12D8 C0D0            822             PUSH PSW
+                     823             
+                     824             ; select bank 0                                 
+12DA C2D3            825             CLR PSW.3 
+                     826             
+                     827             ; timer 1 config
+12DC 758D3C          828             MOV TH1, #THtimer                       ; set th1
+12DF 758B3C          829             MOV TL1, #THtimer                       ; set tl1
+                     830             
+12E2 0E              831             INC R6                                          ; counter1++
+                     832                     
+12E3 7C00            833             MOV R4, #0                                      ; D2changed = 0
+                     834             
+12E5 BE1402          835             CJNE R6, #second, TimerInterruption1End ; counter1 == second
+                     836             
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    14
+
+12E8 7E00            837             MOV R6, #0                                      ; counter1 = 0
+                     838             
+12EA                 839             TimerInterruption1End:
+12EA D0D0            840                     POP PSW
+12EC 32              841                     RETI
+                     842                     
+                     843     END
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    15
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E                   T Y P E  V A L U E   ATTRIBUTES
+
+ALETTER. . . . . . . . .  N NUMB   0011H   A   
+ANSWERB. . . . . . . . .  C ADDR   12A8H   A   
+ANSWERC. . . . . . . . .  C ADDR   12B7H   A   
+ANSWERD. . . . . . . . .  C ADDR   12C6H   A   
+ANSWERSTATE. . . . . . .  N NUMB   0000H   A   
+B. . . . . . . . . . . .  D ADDR   00F0H   A   
+BA . . . . . . . . . . .  B ADDR   00B0H.4 A   
+BB . . . . . . . . . . .  B ADDR   00B0H.5 A   
+BC . . . . . . . . . . .  B ADDR   00B0H.6 A   
+BD . . . . . . . . . . .  B ADDR   00B0H.7 A   
+BLETTER. . . . . . . . .  N NUMB   00C1H   A   
+CHECKANSWERSTATE . . . .  C ADDR   113AH   A   
+CHECKANSWERSTATE1. . . .  C ADDR   1079H   A   
+CHECKB . . . . . . . . .  C ADDR   116DH   A   
+CHECKC . . . . . . . . .  C ADDR   1186H   A   
+CHECKD . . . . . . . . .  C ADDR   119FH   A   
+CHECKNONE. . . . . . . .  C ADDR   11B8H   A   
+CLETTER. . . . . . . . .  N NUMB   0063H   A   
+CONFIGUREINTERRUPTIONS .  C ADDR   11F8H   A   
+COUNTER. . . . . . . . .  N NUMB   0000H   A   
+COUNTER1 . . . . . . . .  N NUMB   0000H   A   
+D1 . . . . . . . . . . .  N NUMB   0000H   A   
+D1CHANGED. . . . . . . .  N NUMB   0000H   A   
+D2 . . . . . . . . . . .  N NUMB   0000H   A   
+D2CHANGED. . . . . . . .  N NUMB   0000H   A   
+DISPLAY. . . . . . . . .  C ADDR   1215H   A   
+DLETTER. . . . . . . . .  N NUMB   0085H   A   
+EIGHT. . . . . . . . . .  N NUMB   0001H   A   
+EIGHTTENTHSECONDS. . . .  N NUMB   0010H   A   
+EIGHTTENTHSECONDSR . . .  C ADDR   1113H   A   
+ENABLEINTERRUPTIONS. . .  C ADDR   11F1H   A   
+ENDCYCLE . . . . . . . .  C ADDR   11CEH   A   
+ENDCYCLE1. . . . . . . .  C ADDR   114AH   A   
+EXTERNALINTERRUPTION0. .  C ADDR   121EH   A   
+EXTERNALINTERRUPTION0END  C ADDR   1263H   A   
+EXTERNALINTERRUPTION1. .  C ADDR   128FH   A   
+EXTERNALINTERRUPTION1END  C ADDR   12D5H   A   
+FIVE . . . . . . . . . .  N NUMB   0049H   A   
+FIVEDOT. . . . . . . . .  N NUMB   0048H   A   
+FIVESECONDS. . . . . . .  N NUMB   0064H   A   
+FIVETENTHSECONDS . . . .  N NUMB   000AH   A   
+FIVETENTHSECONDSR. . . .  C ADDR   10DAH   A   
+FOR. . . . . . . . . . .  C ADDR   1013H   A   
+FOUR . . . . . . . . . .  N NUMB   0099H   A   
+FOURDOT. . . . . . . . .  N NUMB   0098H   A   
+FOURSECONDS. . . . . . .  N NUMB   0050H   A   
+FOURSECONDSR . . . . . .  C ADDR   1064H   A   
+FOURTENTHSECONDS . . . .  N NUMB   0008H   A   
+FOURTENTHSECONDSR. . . .  C ADDR   10C7H   A   
+HIFEN. . . . . . . . . .  N NUMB   00FDH   A   
+HIFENDOT . . . . . . . .  N NUMB   00FCH   A   
+IE . . . . . . . . . . .  D ADDR   00A8H   A   
+INITIALIZATIONS. . . . .  C ADDR   11D2H   A   
+IP . . . . . . . . . . .  D ADDR   00B8H   A   
+IT0. . . . . . . . . . .  B ADDR   0088H.0 A   
+IT1. . . . . . . . . . .  B ADDR   0088H.2 A   
+MAIN . . . . . . . . . .  C ADDR   1000H   A   
+NINE . . . . . . . . . .  N NUMB   0009H   A   
+NINETENTHSECONDS . . . .  N NUMB   0012H   A   
+NINETENTHSECONDSR. . . .  C ADDR   1125H   A   
+A51 MACRO ASSEMBLER  PROJETOASSEMBLY                                                      05/22/2024 00:59:00 PAGE    16
+
+NOTWAITING . . . . . . .  C ADDR   1242H   A   
+NULL . . . . . . . . . .  N NUMB   00FFH   A   
+ONE. . . . . . . . . . .  N NUMB   009FH   A   
+ONEDOT . . . . . . . . .  N NUMB   009EH   A   
+ONESECONDANSWER. . . . .  C ADDR   114CH   A   
+ONESECONDR . . . . . . .  C ADDR   102CH   A   
+ONETENTHSECONDSR . . . .  C ADDR   108EH   A   
+P1 . . . . . . . . . . .  D ADDR   0090H   A   
+P2 . . . . . . . . . . .  D ADDR   00A0H   A   
+P3 . . . . . . . . . . .  D ADDR   00B0H   A   
+PRESSA . . . . . . . . .  N NUMB   0000H   A   
+PRESSB . . . . . . . . .  N NUMB   0000H   A   
+PRESSC . . . . . . . . .  N NUMB   0000H   A   
+PRESSD . . . . . . . . .  N NUMB   0000H   A   
+PSW. . . . . . . . . . .  D ADDR   00D0H   A   
+SECOND . . . . . . . . .  N NUMB   0014H   A   
+SEVEN. . . . . . . . . .  N NUMB   001FH   A   
+SEVENTENTHSECONDS. . . .  N NUMB   000EH   A   
+SEVENTENTHSECONDSR . . .  C ADDR   1100H   A   
+SIX. . . . . . . . . . .  N NUMB   0041H   A   
+SIXTENTHSECONDS. . . . .  N NUMB   000CH   A   
+SIXTENTHSECONDSR . . . .  C ADDR   10EDH   A   
+SP . . . . . . . . . . .  D ADDR   0081H   A   
+STACKPOINTER . . . . . .  N NUMB   000FH   A   
+TENTHSECOND. . . . . . .  N NUMB   0002H   A   
+TH0. . . . . . . . . . .  D ADDR   008CH   A   
+TH1. . . . . . . . . . .  D ADDR   008DH   A   
+THREE. . . . . . . . . .  N NUMB   000DH   A   
+THREEDOT . . . . . . . .  N NUMB   000CH   A   
+THREESECONDS . . . . . .  N NUMB   003CH   A   
+THREESECONDSR. . . . . .  C ADDR   1052H   A   
+THREETENTHSECONDS. . . .  N NUMB   0006H   A   
+THREETENTHSECONDSR . . .  C ADDR   10B4H   A   
+THTIMER. . . . . . . . .  N NUMB   003CH   A   
+TIMERINTERRUPTION0 . . .  C ADDR   1266H   A   
+TIMERINTERRUPTION0END. .  C ADDR   128CH   A   
+TIMERINTERRUPTION1 . . .  C ADDR   12D8H   A   
+TIMERINTERRUPTION1END. .  C ADDR   12EAH   A   
+TIMESTATE. . . . . . . .  N NUMB   0000H   A   
+TL0. . . . . . . . . . .  D ADDR   008AH   A   
+TL1. . . . . . . . . . .  D ADDR   008BH   A   
+TLTIMER. . . . . . . . .  N NUMB   00B0H   A   
+TMOD . . . . . . . . . .  D ADDR   0089H   A   
+TR0. . . . . . . . . . .  B ADDR   0088H.4 A   
+TR1. . . . . . . . . . .  B ADDR   0088H.6 A   
+TWO. . . . . . . . . . .  N NUMB   0025H   A   
+TWODOT . . . . . . . . .  N NUMB   0024H   A   
+TWOSECONDS . . . . . . .  N NUMB   0028H   A   
+TWOSECONDSR. . . . . . .  C ADDR   103FH   A   
+TWOTENTHSECONDS. . . . .  N NUMB   0004H   A   
+TWOTENTHSECONDSR . . . .  C ADDR   10A1H   A   
+WAITINGSTATE . . . . . .  N NUMB   0001H   A   
+ZERO . . . . . . . . . .  N NUMB   0003H   A   
+ZERODOT. . . . . . . . .  N NUMB   0002H   A   
+ZEROTENTHSECONDSR. . . .  C ADDR   107BH   A   
+
+
+REGISTER BANK(S) USED: 0 
+
+
+ASSEMBLY COMPLETE.  0 WARNING(S), 0 ERROR(S)

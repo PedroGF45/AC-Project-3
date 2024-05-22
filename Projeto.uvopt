@@ -26,7 +26,7 @@
     <ToolsetNumber>0x0</ToolsetNumber>
     <ToolsetName>MCS-51</ToolsetName>
     <TargetOption>
-      <CLK51>33000000</CLK51>
+      <CLK51>12000000</CLK51>
       <OPTTT>
         <gFlags>1</gFlags>
         <BeepAtEnd>1</BeepAtEnd>
@@ -132,64 +132,15 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGDP51</Key>
-          <Name>(98=1481,398,1824,692,1)(82=2145,186,2353,301,0)(83=1271,199,1479,314,1)(84=1271,315,1479,430,1)(85=1264,430,1472,545,1)(80=-1,-1,-1,-1,0)(91=1497,119,1707,394,1)(92=1069,132,1279,407,0)(5023=-1,-1,-1,-1,0)</Name>
+          <Name>(98=1529,504,1872,798,0)(82=1232,186,1440,301,0)(83=1503,104,1711,219,0)(84=1495,210,1703,325,0)(85=1513,322,1721,437,0)(80=-1,-1,-1,-1,0)(91=1311,475,1521,750,0)(92=1708,104,1918,379,0)(5023=-1,-1,-1,-1,0)</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint>
-        <Bp>
-          <Number>0</Number>
-          <Type>0</Type>
-          <LineNumber>108</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>-16775090</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>PROJETO.C</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>1</Number>
-          <Type>0</Type>
-          <LineNumber>96</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>-16775144</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>PROJETO.C</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-        <Bp>
-          <Number>2</Number>
-          <Type>0</Type>
-          <LineNumber>126</LineNumber>
-          <EnabledFlag>1</EnabledFlag>
-          <Address>-16775022</Address>
-          <ByteObject>0</ByteObject>
-          <HtxType>0</HtxType>
-          <ManyObjects>0</ManyObjects>
-          <SizeOfObject>0</SizeOfObject>
-          <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
-          <Filename>PROJETO.C</Filename>
-          <ExecCommand></ExecCommand>
-          <Expression></Expression>
-        </Bp>
-      </Breakpoint>
+      <Breakpoint/>
       <MemoryWindow1>
         <Mm>
           <WinNumber>1</WinNumber>
           <SubType>0</SubType>
-          <ItemText>D:0X0A</ItemText>
+          <ItemText>D:0x00</ItemText>
           <AccSizeX>0</AccSizeX>
         </Mm>
       </MemoryWindow1>
@@ -251,8 +202,8 @@
       <tvExp>0</tvExp>
       <tvExpOptDlg>0</tvExpOptDlg>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\projeto.c</PathWithFileName>
-      <FilenameWithoutPath>projeto.c</FilenameWithoutPath>
+      <PathWithFileName>.\projetoC.c</PathWithFileName>
+      <FilenameWithoutPath>projetoC.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
     </File>

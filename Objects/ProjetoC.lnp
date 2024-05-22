@@ -1,0 +1,3 @@
+".\Objects\projetoC.obj" 
+TO ".\Objects\ProjetoC" 
+PRINT(".\Listings\ProjetoC.m51") CODE( 0X0000-0X0FFF )
